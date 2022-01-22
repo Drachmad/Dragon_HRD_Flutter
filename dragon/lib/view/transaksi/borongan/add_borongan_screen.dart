@@ -160,14 +160,14 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 24, right: 24, top: 24, bottom: 24),
+                            left: 24, right: 24, top: 12, bottom: 5),
                         child: Row(
                           children: [
                             Expanded(
                               flex: 2,
                               child: Container(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 10, bottom: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -213,8 +213,8 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                             Expanded(
                               flex: 2,
                               child: Container(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 10, bottom: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -231,6 +231,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                     Container(
                                       height: 40,
                                       decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.1),
                                         border: Border.all(color: GreyColor),
                                         borderRadius: BorderRadius.circular(5),
                                       ),
@@ -278,8 +279,8 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                             Expanded(
                               flex: 2,
                               child: Container(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 10, bottom: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -325,8 +326,8 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                             Expanded(
                               flex: 2,
                               child: Container(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 10, bottom: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -369,11 +370,346 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                 ),
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 24, right: 24, bottom: 5),
+                        child: Row(
+                          children: [
                             Expanded(
                               flex: 2,
                               child: Container(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 10, bottom: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Total KIK",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.1),
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller: boronganController
+                                            .total_kikController,
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Lain",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller:
+                                            boronganController.lainController,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Tot Bon",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller: boronganController
+                                            .tot_bonController,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Other",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller:
+                                            boronganController.otherController,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 24, right: 24, bottom: 15),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "KIK Nett",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.1),
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller: boronganController
+                                            .kik_netController,
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "TMS",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller:
+                                            boronganController.tmsController,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Premi",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller:
+                                            boronganController.premiController,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -465,6 +801,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                           kd_peg: item.kd_peg,
                           nm_peg: item.nm_peg,
                           ptkp: item.ptkp,
+                          // st: item.st,
                         );
                         searchTextField.textField.controller.clear();
                         boronganController.addKeranjang(db_item);
@@ -546,7 +883,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       ),
                     ),
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: Center(
                         child: Text(
                           "NIP",
@@ -585,6 +922,54 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
+                          "ST",
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black87),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
+                          "MS",
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black87),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
+                          "IK",
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black87),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
+                          "NB",
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black87),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
                           "HR",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
@@ -597,7 +982,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Jam1",
+                          "Upah",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -609,7 +994,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Jam2",
+                          "Bon",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -621,7 +1006,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Jam 1 Rp",
+                          "Subsidi",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -633,7 +1018,19 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Jam 2 Rp",
+                          "Sub",
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black87),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
+                          "Harian",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -657,18 +1054,6 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Insentif Bulan",
-                          style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black87),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text(
                           "Jumlah",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
@@ -678,7 +1063,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: 36,
+                      width: 45,
                     ),
                   ],
                 ),

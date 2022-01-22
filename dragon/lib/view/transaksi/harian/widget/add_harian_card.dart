@@ -640,12 +640,24 @@ Widget AddHarianCard(
           ),
           Expanded(
             flex: 2,
-            child: Text(
-              config().format_rupiah(jumlah.toString()),
-              style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black),
+            child: Container(
+              height: 50,
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.1),
+                border: Border.all(color: GreyColor),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  config().format_rupiah(jumlah.toString()),
+                  style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black),
+                ),
+              ),
             ),
           ),
           InkWell(

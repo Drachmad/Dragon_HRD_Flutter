@@ -12,8 +12,8 @@ import 'package:open_file/open_file.dart' as open_file;
 class config {
   static const String nama_perusahaan = "PT. DRAGON SURYATAMA";
 
-  final formatCurrency = new NumberFormat.simpleCurrency(
-      locale: 'id_ID', name: 'Rp ', decimalDigits: 2);
+  final formatCurrency =
+      new NumberFormat.simpleCurrency(locale: 'id_ID', name: 'Rp ');
 
   String format_rupiah(String uang_input) {
     try {

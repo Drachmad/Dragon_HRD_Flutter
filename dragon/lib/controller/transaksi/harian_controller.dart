@@ -44,14 +44,14 @@ class HarianController with ChangeNotifier {
     limitPaging();
 
     index_terpilih = null;
-    tanggal_awal =
-        DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
-    tanggal_akhir =
-        DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
-    range =
-        DateFormat('dd/MM/yyyy', "id_ID").format(DateTime.now()).toString() +
-            ' - ' +
-            DateFormat('dd/MM/yyyy', "id_ID").format(DateTime.now()).toString();
+    // tanggal_awal =
+    //     DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
+    // tanggal_akhir =
+    //     DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
+    // range =
+    //     DateFormat('dd/MM/yyyy', "id_ID").format(DateTime.now()).toString() +
+    //         ' - ' +
+    //         DateFormat('dd/MM/yyyy', "id_ID").format(DateTime.now()).toString();
 
     await selectDataPaginate(true, '');
 

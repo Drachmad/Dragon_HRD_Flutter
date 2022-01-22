@@ -244,6 +244,13 @@ class BoronganController with ChangeNotifier {
   TextEditingController kd_bagController = TextEditingController();
   TextEditingController nm_bagController = TextEditingController();
   TextEditingController kd_grupController = TextEditingController();
+  TextEditingController total_kikController = TextEditingController();
+  TextEditingController lainController = TextEditingController();
+  TextEditingController tot_bonController = TextEditingController();
+  TextEditingController otherController = TextEditingController();
+  TextEditingController kik_netController = TextEditingController();
+  TextEditingController tmsController = TextEditingController();
+  TextEditingController premiController = TextEditingController();
   TextEditingController notesController = TextEditingController();
   List<DataPegawai> data_pegawai_keranjang = List<DataPegawai>();
   double sumQty = 0;

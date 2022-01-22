@@ -50,14 +50,14 @@ class DataPegawai {
     );
   }
 
-  Future<List> data_pegawai() async {
-    final response = await http.post(
-      Uri.parse("${baseUrl}:3000/indeks_pegawai"),
-      // body: {"cari": ""},
-    );
-    var results2 = json.decode(response.body);
-    return results2['data'].toList();
-  }
+  // Future<List> data_pegawai() async {
+  //   final response = await http.post(
+  //     Uri.parse("${baseUrl}:3000/indeks_pegawai"),
+  //     // body: {"cari": ""},
+  //   );
+  //   var results2 = json.decode(response.body);
+  //   return results2['data'].toList();
+  // }
 }
 
 // class PegawaiViewModel {

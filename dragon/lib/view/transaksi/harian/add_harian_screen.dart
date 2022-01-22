@@ -455,6 +455,16 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                                             color: Colors.black87),
                                       ),
                                     ),
+                                    Expanded(
+                                      flex: 5,
+                                      child: Text(
+                                        item.kd_peg,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -670,6 +680,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                 flex: 2,
                 child: Text(
                   config().format_rupiah(harianController.hrTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -680,6 +691,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                 flex: 2,
                 child: Text(
                   config().format_rupiah(harianController.jam1Total.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -690,6 +702,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                 flex: 2,
                 child: Text(
                   config().format_rupiah(harianController.jam2Total.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -701,6 +714,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                 child: Text(
                   config()
                       .format_rupiah(harianController.jam1rpTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -712,6 +726,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                 child: Text(
                   config()
                       .format_rupiah(harianController.jam2rpTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -722,6 +737,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                 flex: 2,
                 child: Text(
                   config().format_rupiah(harianController.lainTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -733,6 +749,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                 child: Text(
                   config().format_rupiah(
                       harianController.insentifbulananTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -744,6 +761,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                 child: Text(
                   config()
                       .format_rupiah(harianController.jumlahTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
