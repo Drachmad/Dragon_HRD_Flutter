@@ -40,7 +40,6 @@ class model_laporan {
       body: data_whr,
     );
     var results2 = json.decode(response.body);
-
     return results2['data'].toList();
   }
 

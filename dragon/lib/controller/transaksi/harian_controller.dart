@@ -355,7 +355,7 @@ class HarianController with ChangeNotifier {
       jam2rpTotal += data_pegawai_keranjang[i].jam2rp ?? 0.00;
       lainTotal += data_pegawai_keranjang[i].lain ?? 0.00;
       insentifbulananTotal += data_pegawai_keranjang[i].insentifbulanan ?? 0.00;
-      jumlahTotal += data_pegawai_keranjang[i].jumlah ?? 0.00;
+      jumlahTotal += data_pegawai_keranjang[i].lain ?? 0.00;
     }
     notifyListeners();
   }

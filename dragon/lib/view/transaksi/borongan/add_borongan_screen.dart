@@ -331,6 +331,53 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
+                                      "Kode Grup",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.1),
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller: boronganController
+                                            .kd_grupController,
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, top: 10, bottom: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
                                       "Notes",
                                       style: TextStyle(
                                           fontSize: 14,

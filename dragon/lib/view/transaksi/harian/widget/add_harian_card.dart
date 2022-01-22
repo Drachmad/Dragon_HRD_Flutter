@@ -18,8 +18,8 @@ Widget AddHarianCard(
   TextEditingController jam2rpController = new TextEditingController();
   TextEditingController lainController = new TextEditingController();
   TextEditingController insentifbulananController = new TextEditingController();
-  TextEditingController jumlahController = new TextEditingController();
-  double subTotal = data_pegawai.jumlah;
+  // TextEditingController jumlahController = new TextEditingController();
+  double jumlah = data_pegawai.lain;
   kd_pegController.value = TextEditingValue(
     text: data_pegawai.kd_peg.toString(),
     selection: TextSelection.fromPosition(
@@ -91,14 +91,14 @@ Widget AddHarianCard(
               .length),
     ),
   );
-  jumlahController.value = TextEditingValue(
-    text: config().format_rupiah(data_pegawai.jumlah.toString()),
-    selection: TextSelection.fromPosition(
-      TextPosition(
-          offset:
-              config().format_rupiah(data_pegawai.jumlah.toString()).length),
-    ),
-  );
+  // jumlahController.value = TextEditingValue(
+  //   text: config().format_rupiah(data_pegawai.jumlah.toString()),
+  //   selection: TextSelection.fromPosition(
+  //     TextPosition(
+  //         offset:
+  //             config().format_rupiah(data_pegawai.jumlah.toString()).length),
+  //   ),
+  // );
   var harianController = Provider.of<HarianController>(context, listen: false);
 
   return Padding(
@@ -640,63 +640,12 @@ Widget AddHarianCard(
           ),
           Expanded(
             flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
-                  border: Border.all(color: GreyColor),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: TextFormField(
-                    readOnly: true,
-                    controller: jumlahController,
-                    style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w500),
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 2, vertical: 16),
-                      hintText: "0.0",
-                      hintStyle: GoogleFonts.poppins(
-                          color: GreyColor,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14),
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      focusedErrorBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                    ),
-                    onChanged: (numb) {
-                      if (numb.isNotEmpty) {
-                        jumlahController.value = TextEditingValue(
-                          text: config().format_rupiah(jumlahController.text),
-                          selection: TextSelection.fromPosition(
-                            TextPosition(
-                                offset: config()
-                                    .format_rupiah(jumlahController.text)
-                                    .length),
-                          ),
-                        );
-                        harianController.data_pegawai_keranjang[index].jumlah =
-                            config().convert_rupiah(jumlahController.text);
-                        harianController.hitungSubTotal();
-                        harianController.notifyListeners();
-                      }
-                    },
-                    onFieldSubmitted: (value) {
-                      harianController.data_pegawai_keranjang[index].jumlah =
-                          config().convert_rupiah(jumlahController.text);
-                      harianController.hitungSubTotal();
-                    },
-                  ),
-                ),
-              ),
+            child: Text(
+              config().format_rupiah(jumlah.toString()),
+              style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black),
             ),
           ),
           InkWell(

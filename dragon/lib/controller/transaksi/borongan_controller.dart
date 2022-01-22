@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:dragon/config/config.dart';
+// import 'package:intl/intl.dart';
 import 'package:dragon/model/data_pegawai.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dragon/model/transaksi/model_borongan.dart';
@@ -8,29 +7,28 @@ import 'package:dragon/view/base_widget/toast.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class BoronganController with ChangeNotifier {
-  model_borongan m_order = model_borongan();
+  model_borongan m_borongan = model_borongan();
   TextEditingController searchController = TextEditingController();
   DateRangePickerController filter_tanggalController =
       new DateRangePickerController();
   List data_borongan_list = [];
   bool proses = false;
   bool isEnable_button = true;
-  String selectedDate = '';
-  String dateCount = '';
-  String range = 'Pilih tanggal';
-  String rangeCount = '';
-  String tanggal_awal = "";
-  String tanggal_akhir = "";
+  // String selectedDate = '';
+  // String dateCount = '';
+  // String range = 'Pilih tanggal';
+  // String rangeCount = '';
+  // String tanggal_awal = "";
+  // String tanggal_akhir = "";
   int index_terpilih;
 
   ///paginate
   TextEditingController c_page = new TextEditingController();
   TextEditingController cari = TextEditingController();
-  model_borongan m_borongan = model_borongan();
   List<DropdownMenuItem<int>> dropdownLimit;
   int totalNotaTerima = 0;
   int offset = 0;
-  int limit = 50;
+  int limit = 0;
   double pageCount = 1;
   int page_index = 0;
 
@@ -44,14 +42,14 @@ class BoronganController with ChangeNotifier {
     limitPaging();
 
     index_terpilih = null;
-    tanggal_awal =
-        DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
-    tanggal_akhir =
-        DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
-    range =
-        DateFormat('dd/MM/yyyy', "id_ID").format(DateTime.now()).toString() +
-            ' - ' +
-            DateFormat('dd/MM/yyyy', "id_ID").format(DateTime.now()).toString();
+    // tanggal_awal =
+    //     DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
+    // tanggal_akhir =
+    //     DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
+    // range =
+    //     DateFormat('dd/MM/yyyy', "id_ID").format(DateTime.now()).toString() +
+    //         ' - ' +
+    //         DateFormat('dd/MM/yyyy', "id_ID").format(DateTime.now()).toString();
 
     await selectDataPaginate(true, '');
 
@@ -67,6 +65,7 @@ class BoronganController with ChangeNotifier {
     data_borongan_list =
         await m_borongan.data_borongan_paginate(cari, offset, limit);
     var count = await m_borongan.count_borongan_paginate(cari);
+    print(count);
     totalNotaTerima = int.tryParse(count[0]['COUNT(*)'].toString()) ?? 0;
     pageCount = totalNotaTerima / limit;
     notifyListeners();
@@ -95,47 +94,47 @@ class BoronganController with ChangeNotifier {
   }
 
   // Future<void> select_data() async {
-  //   data_borongan_list = await m_order.data_borongan_paginate(
+  //   data_borongan_list = await m_borongan.data_borongan_paginate(
   //       searchController.text, tanggal_awal, tanggal_akhir);
   //   notifyListeners();
   // }
 
-  void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    if (args.value != null) {
-      if (args.value is PickerDateRange) {
-        if (args.value.startDate != null) {
-          range = DateFormat('dd/MM/yyyy', "id_ID")
-                  .format(args.value.startDate)
-                  .toString() +
-              ' - ' +
-              DateFormat('dd/MM/yyyy', "id_ID")
-                  .format(args.value.endDate ?? args.value.startDate)
-                  .toString();
-        }
-        if (args.value.startDate != null && args.value.endDate != null) {
-          tanggal_awal = DateFormat('yyyy-MM-dd', "id_ID")
-              .format(args.value.startDate)
-              .toString();
-          tanggal_akhir = DateFormat('yyyy-MM-dd', "id_ID")
-              .format(args.value.endDate)
-              .toString();
-          isEnable_button = true;
-        } else {
-          isEnable_button = false;
-        }
-      } else if (args.value is DateTime) {
-        selectedDate = args.value.toString();
-        isEnable_button = false;
-      } else if (args.value is List<DateTime>) {
-        dateCount = args.value.length.toString();
-        isEnable_button = false;
-      } else {
-        rangeCount = args.value.length.toString();
-        isEnable_button = false;
-      }
-      notifyListeners();
-    }
-  }
+  // void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+  //   if (args.value != null) {
+  //     if (args.value is PickerDateRange) {
+  //       if (args.value.startDate != null) {
+  //         range = DateFormat('dd/MM/yyyy', "id_ID")
+  //                 .format(args.value.startDate)
+  //                 .toString() +
+  //             ' - ' +
+  //             DateFormat('dd/MM/yyyy', "id_ID")
+  //                 .format(args.value.endDate ?? args.value.startDate)
+  //                 .toString();
+  //       }
+  //       if (args.value.startDate != null && args.value.endDate != null) {
+  //         tanggal_awal = DateFormat('yyyy-MM-dd', "id_ID")
+  //             .format(args.value.startDate)
+  //             .toString();
+  //         tanggal_akhir = DateFormat('yyyy-MM-dd', "id_ID")
+  //             .format(args.value.endDate)
+  //             .toString();
+  //         isEnable_button = true;
+  //       } else {
+  //         isEnable_button = false;
+  //       }
+  //     } else if (args.value is DateTime) {
+  //       selectedDate = args.value.toString();
+  //       isEnable_button = false;
+  //     } else if (args.value is List<DateTime>) {
+  //       dateCount = args.value.length.toString();
+  //       isEnable_button = false;
+  //     } else {
+  //       rangeCount = args.value.length.toString();
+  //       isEnable_button = false;
+  //     }
+  //     notifyListeners();
+  //   }
+  // }
 
   // void proses_export() {
   //   if (data_borongan_list.length > 0) {
@@ -206,7 +205,7 @@ class BoronganController with ChangeNotifier {
   //     header_detail_excel.add("Qty");
   //     header_detail_excel.add("Harga");
   //     header_detail_excel.add("SubTotal");
-  //     List data_pegawai = await m_order.select_borongan_detail(
+  //     List data_pegawai = await m_borongan.select_borongan_detail(
   //         data_borongan_list[index_terpilih]['no_bukti'], "no_bukti", "hrd_absen");
   //     for (int i = 0; i < data_pegawai.length; i++) {
   //       Map<String, dynamic> isi_map = new Map<String, dynamic>();
@@ -234,7 +233,7 @@ class BoronganController with ChangeNotifier {
   // }
 
   // Future<void> proses_print() async {
-  //   List data_pegawai = await m_order.select_borongan_detail(
+  //   List data_pegawai = await m_borongan.select_borongan_detail(
   //       data_borongan_list[index_terpilih]['no_bukti'], "no_bukti", "hrd_absen");
   //   // InvoiceOrderPenjualan()
   //   //     .proses_print(data_borongan_list[index_terpilih], data_pegawai);
@@ -244,6 +243,7 @@ class BoronganController with ChangeNotifier {
   TextEditingController no_buktiController = TextEditingController();
   TextEditingController kd_bagController = TextEditingController();
   TextEditingController nm_bagController = TextEditingController();
+  TextEditingController kd_grupController = TextEditingController();
   TextEditingController notesController = TextEditingController();
   List<DataPegawai> data_pegawai_keranjang = List<DataPegawai>();
   double sumQty = 0;
@@ -263,6 +263,7 @@ class BoronganController with ChangeNotifier {
     no_buktiController.clear();
     kd_bagController.clear();
     nm_bagController.clear();
+    kd_grupController.clear();
     notesController.clear();
     sumQty = 0;
     hrTotal = 0;
@@ -286,11 +287,12 @@ class BoronganController with ChangeNotifier {
   Future<void> initData_editBorongan(var data_edit) async {
     no_buktiController.text = data_edit['no_bukti'];
     kd_bagController.text = data_edit['kd_bag'];
+    kd_grupController.text = data_edit['kd_grup'];
     nm_bagController.text = data_edit['nm_bag'];
     notesController.text = data_edit['notes'];
     // chooseDate = DateFormat("yyyy-MM-dd").parse(data_edit['TGL']);
     // status_borongan = data_edit['POSTED'] == 1 ? true : false;
-    List data_lama = await m_order.select_borongan_detail(
+    List data_lama = await m_borongan.select_borongan_detail(
         data_edit['no_bukti'], "no_bukti", "hrd_absend");
     data_pegawai_keranjang = new List<DataPegawai>();
 
@@ -367,7 +369,7 @@ class BoronganController with ChangeNotifier {
     if (kd_bagController.text.isNotEmpty) {
       if (data_pegawai_keranjang.length > 0) {
         BotToast.showLoading();
-        var data_ready = await m_order.get_no_bukti(
+        var data_ready = await m_borongan.get_no_bukti(
             no_buktiController.text, "no_bukti", "hrd_absen");
         if (data_ready.length > 0) {
           Toast("Peringatan !",
@@ -385,9 +387,10 @@ class BoronganController with ChangeNotifier {
               kd_bagController.text;
           obj['kd_bag'] = kd_bagController.text;
           obj['nm_bag'] = nm_bagController.text;
+          obj['kd_grup'] = kd_grupController.text;
           obj['notes'] = notesController.text;
           obj['tabeld'] = await baca_tabeld();
-          await m_order.insert_borongan(obj);
+          await m_borongan.insert_borongan(obj);
           BotToast.closeAllLoading();
           return true;
         }
@@ -410,9 +413,10 @@ class BoronganController with ChangeNotifier {
         obj['no_bukti'] = no_buktiController.text;
         obj['kd_bag'] = kd_bagController.text;
         obj['nm_bag'] = nm_bagController.text;
+        obj['kd_grup'] = kd_grupController.text;
         obj['notes'] = notesController.text;
         obj['tabeld'] = await baca_tabeld();
-        await m_order.update_borongan(obj);
+        await m_borongan.update_borongan(obj);
         BotToast.closeAllLoading();
         Toast("Success !", "Berhasil mengedit data", true);
         return true;
@@ -428,7 +432,7 @@ class BoronganController with ChangeNotifier {
 
   Future<bool> deleteBorongan(String no_bukti) async {
     try {
-      var delete = await m_order.delete_borongan(no_bukti);
+      var delete = await m_borongan.delete_borongan(no_bukti);
       await selectDataPaginate(true, '');
       return true;
     } catch (e) {

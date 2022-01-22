@@ -1382,10 +1382,10 @@ exports.lap_lembur_perjam = function (req, res) {
 // ==================================================================
 ///Paginate Transaksi Harian
 exports.harian_paginate = function (req, res) {
-    var filter_cari = '%' + req.body.cari + '%';
+    var filter_cari = "%" + req.body.cari + "%";
     var offset_page = Number(req.body.offset);
     var limit_page = Number(req.body.limit);
-    connection.query("select * from hrd_absen where no_bukti like ? or kd_bag like ? LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+    connection.query("select * from hrd_absen where (no_bukti like ? OR kd_bag like ?) AND flag='HR' ORDER BY no_bukti LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1399,7 +1399,7 @@ exports.harian_paginate = function (req, res) {
 ///paginate Transaksi Harian
 exports.count_harian_paginate = function (req, res) {
     var filter_cari = '%' + req.body.cari + '%';
-    connection.query("select COUNT(*) from hrd_absen where no_bukti like ? or kd_bag like ? ORDER BY no_bukti", [filter_cari, filter_cari],
+    connection.query("select COUNT(*) from hrd_absen where (no_bukti like ? OR kd_bag like ?) AND flag='HR' ORDER BY no_bukti", [filter_cari, filter_cari],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1487,10 +1487,10 @@ exports.hapus_harian = function (req, res) {
 // ==================================================================
 ///Paginate Transaksi Borongan
 exports.borongan_paginate = function (req, res) {
-    var filter_cari = req.body.cari;
+    var filter_cari = "%" + req.body.cari + "%";
     var offset_page = Number(req.body.offset);
     var limit_page = Number(req.body.limit);
-    connection.query("select * from hrd_absen where flag='BR' if(no_bukti<>'',OR no_bukti LIKE ?,true) if(kd_bag<>'',OR kd_bag LIKE ?,true) LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+    connection.query("select * from hrd_absen where (no_bukti like ? OR kd_bag like ?) AND flag='BR' ORDER BY no_bukti LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1504,7 +1504,7 @@ exports.borongan_paginate = function (req, res) {
 ///paginate Transaksi Borongan
 exports.count_borongan_paginate = function (req, res) {
     var filter_cari = '%' + req.body.cari + '%';
-    connection.query("select COUNT(*) from hrd_absen where no_bukti like ? or kd_bag like ? ORDER BY no_bukti", [filter_cari, filter_cari],
+    connection.query("select COUNT(*) from hrd_absen where (no_bukti like ? OR kd_bag like ?) AND flag='BR' ORDER BY no_bukti", [filter_cari, filter_cari],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);

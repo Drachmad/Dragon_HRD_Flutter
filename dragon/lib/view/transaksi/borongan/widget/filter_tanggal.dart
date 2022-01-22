@@ -72,8 +72,8 @@ class _FilterTanggalState extends State<FilterTanggal> {
                         child: SfDateRangePicker(
                           controller:
                               boronganController.filter_tanggalController,
-                          onSelectionChanged:
-                              boronganController.onSelectionChanged,
+                          // onSelectionChanged:
+                          //     boronganController.onSelectionChanged,
                           selectionMode: DateRangePickerSelectionMode.range,
                           selectionColor: HijauColor,
                           endRangeSelectionColor: HijauColor,
