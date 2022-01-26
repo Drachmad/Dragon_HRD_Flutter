@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dragon/config/animation_custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dragon/config/OnHoverButton.dart';
 import 'package:dragon/config/color.dart';
 import 'package:dragon/controller/master/hrd_bagian_controller.dart';
+import 'package:dragon/view/master/hrd_bagian/pilih_grup.dart';
 import 'package:provider/provider.dart';
 
 class TambahHRDbagianScreen extends StatefulWidget {
@@ -342,6 +343,7 @@ class _TambahHRDbagianScreenState extends State<TambahHRDbagianScreen> {
                                     Container(
                                       height: 40,
                                       decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.1),
                                         border: Border.all(color: GreyColor),
                                         borderRadius: BorderRadius.circular(5),
                                       ),
@@ -350,9 +352,14 @@ class _TambahHRDbagianScreenState extends State<TambahHRDbagianScreen> {
                                       child: TextFormField(
                                         controller: hrdbagianController
                                             .kd_grupController,
+                                        readOnly: true,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
                                               top: 18, bottom: 18),
+                                          icon: Image.asset(
+                                            "assets/images/ic_search.png",
+                                            height: 20,
+                                          ),
                                           border: InputBorder.none,
                                           focusedBorder: InputBorder.none,
                                           focusedErrorBorder: InputBorder.none,
@@ -360,6 +367,21 @@ class _TambahHRDbagianScreenState extends State<TambahHRDbagianScreen> {
                                           enabledBorder: InputBorder.none,
                                           disabledBorder: InputBorder.none,
                                         ),
+                                        onTap: () {
+                                          showAnimatedDialog(
+                                              context,
+                                              PilihGrup(
+                                                  hrdbagianController
+                                                          .kd_grupController
+                                                          .text
+                                                          .isEmpty
+                                                      ? null
+                                                      : hrdbagianController
+                                                          .nm_grupController
+                                                          .text,
+                                                  hrdbagianController),
+                                              isFlip: false);
+                                        },
                                       ),
                                     ),
                                   ],

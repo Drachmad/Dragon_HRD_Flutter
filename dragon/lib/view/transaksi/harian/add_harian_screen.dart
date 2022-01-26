@@ -1,4 +1,5 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:dragon/controller/login_controller.dart';
 import 'package:dragon/view/transaksi/harian/widget/pilih_bagian.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,6 +37,8 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
       Provider.of<HarianController>(context, listen: false)
           .initData_addHarian();
     }
+    Provider.of<HarianController>(context, listen: false).dr =
+        Provider.of<LoginController>(context, listen: false).dr;
     super.initState();
   }
 
@@ -239,7 +242,7 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                                       child: TextFormField(
                                         controller:
                                             harianController.kd_bagController,
-                                        readOnly: widget.isModeEdit,
+                                        readOnly: true,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
                                               top: 18, bottom: 18),
@@ -417,6 +420,8 @@ class _AddHarianScreenState extends State<AddHarianScreen> {
                           noid: item.noid,
                           kd_peg: item.kd_peg,
                           nm_peg: item.nm_peg,
+                          kd_grup: item.kd_grup,
+                          nm_grup: item.nm_grup,
                           ptkp: item.ptkp,
                         );
                         searchTextField.textField.controller.clear();

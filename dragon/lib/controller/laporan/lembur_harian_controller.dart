@@ -4,13 +4,16 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:dragon/view/base_widget/toast.dart';
 import 'package:dragon/config/export_pdf.dart';
 import 'package:dragon/model/laporan/model_laporan.dart';
+import 'package:intl/intl.dart';
 
 class LemburHarianController with ChangeNotifier {
   model_laporan m_data = model_laporan();
   List data_list = [];
   bool isEnable_button = true;
+  String PER = DateTime.now().toString().substring(0, 7);
   int index_terpilih;
   DateTime chooseDate = DateTime.now();
+  final format_tanggal = new DateFormat("yyyy-MM-DD");
   TextEditingController tglController = TextEditingController();
   TextEditingController kd_bagController = TextEditingController();
 
@@ -21,8 +24,6 @@ class LemburHarianController with ChangeNotifier {
 
   void initData() {
     index_terpilih = null;
-    tglController.clear();
-    kd_bagController.clear();
     select_data('', '');
   }
 
@@ -46,7 +47,7 @@ class LemburHarianController with ChangeNotifier {
         isi_excel.add(isi_map);
       }
       String judul = "Laporan Lembur Harian";
-      String header_title = "";
+      String header_title = "Lembur Harian";
       if (mode == 0) {
         config().createExcel3(header_excel, isi_excel, header_title, judul);
       } else {

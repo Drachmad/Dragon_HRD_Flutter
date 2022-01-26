@@ -54,7 +54,12 @@ class model_harian {
           "no_bukti": data_insert['no_bukti'].toString(),
           "kd_bag": data_insert['kd_bag'].toString(),
           "nm_bag": data_insert['nm_bag'].toString(),
+          "kd_grup": data_insert['kd_grup'].toString(),
+          "nm_grup": data_insert['nm_grup'].toString(),
           "notes": data_insert['notes'].toString(),
+          "dr": data_insert['dr'].toString(),
+          "flag": data_insert['flag'].toString(),
+          "per": data_insert['per'].toString(),
         },
       );
 
@@ -67,9 +72,14 @@ class model_harian {
           Uri.parse("${baseUrl}:3000/tambah_detail_harian"),
           body: {
             "no_bukti": data_insert['no_bukti'].toString(),
+            "flag": data_insert['flag'].toString(),
             "kd_bag": data_detail[i]['kd_bag'].toString(),
+            "nm_bag": data_detail[i]['nm_bag'].toString(),
             "kd_peg": data_detail[i]['kd_peg'].toString(),
             "nm_peg": data_detail[i]['nm_peg'].toString(),
+            "kd_grup": data_detail[i]['kd_grup'].toString(),
+            "nm_grup": data_detail[i]['nm_grup'].toString(),
+            "dr": data_detail[i]['dr'].toString(),
             "ptkp": data_detail[i]['ptkp'].toString(),
             "hr": data_detail[i]['hr'].toString(),
             "jam1": data_detail[i]['jam1'].toString(),
@@ -79,6 +89,7 @@ class model_harian {
             "lain": data_detail[i]['lain'].toString(),
             "insentifbulanan": data_detail[i]['insentifbulanan'].toString(),
             "jumlah": data_detail[i]['jumlah'].toString(),
+            "per": data_detail[i]['per'].toString(),
           },
         );
       }
@@ -119,9 +130,14 @@ class model_harian {
           Uri.parse("${baseUrl}:3000/tambah_detail_harian"),
           body: {
             "no_bukti": data_insert['no_bukti'].toString(),
+            "flag": data_insert['flag'].toString(),
             "kd_bag": data_detail[i]['kd_bag'].toString(),
+            "nm_bag": data_detail[i]['nm_bag'].toString(),
             "kd_peg": data_detail[i]['kd_peg'].toString(),
             "nm_peg": data_detail[i]['nm_peg'].toString(),
+            "kd_grup": data_detail[i]['kd_grup'].toString(),
+            "nm_grup": data_detail[i]['nm_grup'].toString(),
+            "dr": data_detail[i]['dr'].toString(),
             "ptkp": data_detail[i]['ptkp'].toString(),
             "hr": data_detail[i]['hr'].toString(),
             "jam1": data_detail[i]['jam1'].toString(),

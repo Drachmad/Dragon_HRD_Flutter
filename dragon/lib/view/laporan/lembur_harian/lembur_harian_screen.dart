@@ -420,7 +420,7 @@ class MyData extends DataTableSource {
       ),
       DataCell(
         Text(
-          dtx[index]['TGL'].toString().substring(0, 10),
+          DateTime.parse(dtx[index]['TGL']).toString().substring(0, 10),
           style: TextStyle(color: Colors.black),
         ),
       ),

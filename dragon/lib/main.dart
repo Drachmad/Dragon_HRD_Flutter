@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:dragon/controller/account_controller.dart';
 import 'package:dragon/controller/pilih_bagian_controller.dart';
+import 'package:dragon/controller/pilih_grup_controller.dart';
 import 'package:dragon/controller/master/sp_bagian_controller.dart';
 import 'package:dragon/controller/master/sp_barang_controller.dart';
 import 'package:dragon/controller/master/sp_inventori_controller.dart';
@@ -44,6 +45,7 @@ Future<void> init() async {
   sl.registerFactory(() => HomeController());
   sl.registerFactory(() => AccountController());
   sl.registerFactory(() => PilihBagianController());
+  sl.registerFactory(() => PilihGrupController());
   sl.registerFactory(() => SP_BagianController());
   sl.registerFactory(() => SP_Barang_Controller());
   sl.registerFactory(() => SP_InventoriController());
@@ -83,6 +85,8 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => sl<AccountController>()),
           ChangeNotifierProvider(
               create: (context) => sl<PilihBagianController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<PilihGrupController>()),
           ChangeNotifierProvider(
               create: (context) => sl<SP_BagianController>()),
           ChangeNotifierProvider(

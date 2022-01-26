@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -10,7 +8,6 @@ import 'package:open_file/open_file.dart' as open_file;
 
 Future<Uint8List> ExportPDF(List header, List isi_data, String title) async {
   final pdf = pdfWidget.Document();
-  // print(isi_data[0].length);
 
   pdf.addPage(pdfWidget.Page(
     pageFormat: PdfPageFormat.a4,

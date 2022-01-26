@@ -1,34 +1,35 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dragon/config/color.dart';
+import 'package:dragon/controller/pilih_grup_controller.dart';
 import 'package:dragon/controller/master/hrd_bagian_controller.dart';
 import 'package:dragon/view/base_widget/toast.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-class PilihHRDbagian extends StatefulWidget {
-  String hrdbagian_terpilih;
+class PilihGrup extends StatefulWidget {
+  String grup_terpilih;
   var controller;
 
-  PilihHRDbagian(this.hrdbagian_terpilih, this.controller);
+  PilihGrup(this.grup_terpilih, this.controller);
 
   @override
-  _PilihHRDbagianState createState() => _PilihHRDbagianState();
+  _PilihGrupState createState() => _PilihGrupState();
 }
 
-class _PilihHRDbagianState extends State<PilihHRDbagian> {
+class _PilihGrupState extends State<PilihGrup> {
   int index_terpilih;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
-    Provider.of<HRD_BagianController>(context, listen: false).initData();
+    Provider.of<PilihGrupController>(context, listen: false).initData('');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HRD_BagianController>(
-        builder: (context, hrdbagianController, child) {
+    return Consumer<PilihGrupController>(
+        builder: (context, grupController, child) {
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Container(
@@ -37,7 +38,7 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Text("PILIH BAGIAN",
+              child: Text("PILIH GRUP",
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -77,7 +78,7 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
                       disabledBorder: InputBorder.none,
                     ),
                     onChanged: (value) {
-                      hrdbagianController.initData();
+                      grupController.initData(value);
                     },
                   ),
                 ),
@@ -93,7 +94,7 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
                   Expanded(
                     flex: 3,
                     child: Text(
-                      "Id Bagian",
+                      "Kode Grup",
                       style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -103,17 +104,7 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
                   Expanded(
                     flex: 6,
                     child: Text(
-                      "Nama Bagian",
-                      style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: GreyColor),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 6,
-                    child: Text(
-                      "Alamat",
+                      "Nama Grup",
                       style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -128,9 +119,9 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: hrdbagianController.data_hrdBagianList.length,
+                itemCount: grupController.data_grupList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return HRDbagianCard(index);
+                  return GrupCard(index);
                 },
               ),
             ),
@@ -159,9 +150,18 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
                   child: InkWell(
                 onTap: () async {
                   if (index_terpilih != null) {
-                    widget.controller.hrdbagianController.text =
-                        hrdbagianController.data_hrdBagianList[index_terpilih]
-                            ['KODES'];
+                    Provider.of<HRD_BagianController>(context, listen: false)
+                            .kd_grupController
+                            .text =
+                        grupController.data_grupList[index_terpilih]['kd_grup'];
+                    Provider.of<HRD_BagianController>(context, listen: false)
+                            .nm_grupController
+                            .text =
+                        grupController.data_grupList[index_terpilih]['nm_grup'];
+                    Provider.of<HRD_BagianController>(context, listen: false)
+                            .acnoController
+                            .text =
+                        grupController.data_grupList[index_terpilih]['acno'];
                     Navigator.pop(context);
                   } else {
                     Toast("Peringatan", "Belum ada data terpilih", false);
@@ -190,13 +190,12 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
     });
   }
 
-  Widget HRDbagianCard(int index) {
+  Widget GrupCard(int index) {
     bool isActive = index == index_terpilih;
-    var data_hrdbagian =
-        Provider.of<HRD_BagianController>(context, listen: false)
-            .data_hrdBagianList[index];
-    if (widget.hrdbagian_terpilih != null) {
-      if (data_hrdbagian['NAMAS'] == widget.hrdbagian_terpilih) {
+    var data_grup = Provider.of<PilihGrupController>(context, listen: false)
+        .data_grupList[index];
+    if (widget.grup_terpilih != null) {
+      if (data_grup['NAMAS'] == widget.grup_terpilih) {
         isActive = true;
         index_terpilih = index;
       }
@@ -204,7 +203,7 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
     return InkWell(
       onTap: () {
         index_terpilih = index;
-        widget.hrdbagian_terpilih = data_hrdbagian['NAMAS'];
+        widget.grup_terpilih = data_grup['NAMAS'];
         setState(() {});
       },
       child: Container(
@@ -217,7 +216,7 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    data_hrdbagian['KODES'].toString(),
+                    data_grup['kd_grup'].toString(),
                     style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -227,17 +226,7 @@ class _PilihHRDbagianState extends State<PilihHRDbagian> {
                 Expanded(
                   flex: 6,
                   child: Text(
-                    data_hrdbagian['NAMAS'],
-                    style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isActive ? Colors.white : Colors.black),
-                  ),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Text(
-                    data_hrdbagian['ALMT_K'],
+                    data_grup['nm_grup'],
                     style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,

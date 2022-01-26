@@ -65,6 +65,19 @@ exports.data_bagian = function (req, res) {
             }
         });
 }
+///Data Grup
+exports.data_grup = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select * from hrd_grup WHERE nm_grup like ? OR kd_grup like ? ORDER BY kd_grup", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
 
 // ==================================================================
 ///paginate Sparepart Bagian
@@ -1291,8 +1304,12 @@ exports.lap_absen_harian = function (req, res) {
 };
 ///LAPORAN ABSEN LEMBUR
 exports.lap_absen_lemburan = function (req, res) {
+    var filter_kd_bag = '';
     var KD_BAG = req.body.KD_BAG;
-    connection.query("SELECT hrd_peg.kd_peg AS KD_PEG, hrd_peg.nm_peg AS NM_PEG, CONCAT(hrd_peg.kd_bag,' - ',hrd_peg.nm_bag) AS BAGIAN, hrd_peg.ulembur AS ULEMBUR FROM hrd_peg, hrd_bag WHERE hrd_peg.kd_bag=hrd_bag.kd_bag AND hrd_peg.aktif='1' AND hrd_peg.kd_bag= ? ORDER BY hrd_peg.kd_peg", [KD_BAG],
+    if (req.body.KD_BAG != '') {
+        filter_kd_bag = "AND hrd_peg.kd_bag='" + KD_BAG + "'";
+    }
+    connection.query("SELECT hrd_peg.kd_peg AS KD_PEG, hrd_peg.nm_peg AS NM_PEG, CONCAT(hrd_peg.kd_bag,' - ',hrd_peg.nm_bag) AS BAGIAN, hrd_peg.ulembur AS ULEMBUR FROM hrd_peg, hrd_bag WHERE hrd_peg.kd_bag=hrd_bag.kd_bag AND hrd_peg.aktif='1' " + filter_kd_bag + " ORDER BY hrd_peg.kd_peg",
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1413,9 +1430,13 @@ exports.tambah_header_harian = function (req, res) {
     var no_bukti = req.body.no_bukti;
     var kd_bag = req.body.kd_bag;
     var nm_bag = req.body.nm_bag;
+    var kd_grup = req.body.kd_grup;
+    var nm_grup = req.body.nm_grup;
     var notes = req.body.notes;
-    var flag = "HR";
-    connection.query("insert into hrd_absen (no_bukti, kd_bag, nm_bag, notes, flag) values (?,?,?,?,?)", [no_bukti, kd_bag, nm_bag, notes, flag],
+    var dr = req.body.dr;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    connection.query("insert into hrd_absen (no_bukti, kd_bag, nm_bag, kd_grup, nm_grup, notes, flag, dr, per) values (?,?,?,?,?,?,?,?,?)", [no_bukti, kd_bag, nm_bag, kd_grup, nm_grup, notes, flag, dr, per],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1430,9 +1451,14 @@ exports.tambah_header_harian = function (req, res) {
 ///DETAIL
 exports.tambah_detail_harian = function (req, res) {
     var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
     var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
     var kd_peg = req.body.kd_peg;
     var nm_peg = req.body.nm_peg;
+    var kd_grup = req.body.kd_grup;
+    var nm_grup = req.body.nm_grup;
+    var dr = req.body.dr;
     var ptkp = req.body.ptkp;
     var hr = req.body.hr;
     var jam1 = req.body.jam1;
@@ -1442,7 +1468,8 @@ exports.tambah_detail_harian = function (req, res) {
     var lain = req.body.lain;
     var insentifbulanan = req.body.insentifbulanan;
     var jumlah = req.body.jumlah;
-    connection.query("insert into hrd_absend (no_bukti,kd_bag,kd_peg,nm_peg,ptkp,hr,jam1,jam2,jam1rp,jam2rp,lain,tperbulan,jumlah) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, kd_bag, kd_peg, nm_peg, ptkp, hr, jam1, jam2, jam1rp, jam2rp, lain, insentifbulanan, jumlah],
+    var per = req.body.per;
+    connection.query("insert into hrd_absend (no_bukti,flag,kd_bag,nm_bag,kd_peg,nm_peg,kd_grup,nm_grup,dr,ptkp,hr,jam1,jam2,jam1rp,jam2rp,lain,tperbulan,jumlah,per) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, flag, kd_bag, nm_bag, kd_peg, nm_peg, kd_grup, nm_grup, dr, ptkp, hr, jam1, jam2, jam1rp, jam2rp, lain, insentifbulanan, jumlah, per],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);

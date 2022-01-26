@@ -14,6 +14,7 @@ class AbsenLemburanController with ChangeNotifier {
   DateTime chooseDate = DateTime.now();
   final format_tanggal = new DateFormat("yyyy-MM-DD");
   TextEditingController tglController = TextEditingController();
+  TextEditingController kd_bagController = TextEditingController();
 
   Future<void> select_data(String KD_BAG) async {
     data_list = await m_data.lap_absen_lemburan(KD_BAG);

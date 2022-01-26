@@ -176,7 +176,9 @@ class _AbsenLemburanScreenState extends State<AbsenLemburanScreen> {
                       flex: 3,
                       child: InkWell(
                         child: Container(
-                          height: 40,
+                          margin:
+                              const EdgeInsets.only(left: 10.0, right: 10.0),
+                          height: 50,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -194,7 +196,7 @@ class _AbsenLemburanScreenState extends State<AbsenLemburanScreen> {
                           child: TextFormField(
                             controller: lap_absen.tglController,
                             decoration: InputDecoration(
-                              hintText: 'Tanggal',
+                              hintText: 'Semua Tanggal',
                               contentPadding:
                                   EdgeInsets.only(top: 18, bottom: 18),
                               icon: Image.asset(
@@ -211,40 +213,26 @@ class _AbsenLemburanScreenState extends State<AbsenLemburanScreen> {
                             onTap: () async {
                               lap_absen.chooseDate = await showDatePicker(
                                       context: context,
-                                      initialDate: lap_absen.chooseDate ??
-                                          DateTime.now(),
+                                      initialDate: DateTime.now(),
                                       lastDate: DateTime(2050),
                                       firstDate: DateTime(2020)) ??
                                   lap_absen.chooseDate;
                               lap_absen.tglController.text = lap_absen
-                                  .format_tanggal
-                                  .format(lap_absen.chooseDate);
+                                  .chooseDate
+                                  .toString()
+                                  .substring(0, 10);
                             },
                           ),
                         ),
                       ),
                     ),
-                    Expanded(flex: 1, child: SizedBox()),
                     Expanded(
                       flex: 3,
                       child: InkWell(
-                        onTap: () {
-                          showAnimatedDialog_withCallBack(
-                              context, PilihBagian("", lap_absen), isFlip: true,
-                              callback: (value) {
-                            if (value != null) {
-                              if (value) {
-                                lap_absen.notifyListeners();
-                              } else {
-                                lap_absen.notifyListeners();
-                                Navigator.pop(context, true);
-                              }
-                            }
-                          });
-                        },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 10),
+                          margin:
+                              const EdgeInsets.only(left: 10.0, right: 10.0),
+                          height: 50,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -258,16 +246,68 @@ class _AbsenLemburanScreenState extends State<AbsenLemburanScreen> {
                               ),
                             ],
                           ),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Bagian",
-                                style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: TextFormField(
+                            controller: lap_absen.kd_bagController,
+                            decoration: InputDecoration(
+                              hintText: 'Semua Bagian',
+                              contentPadding:
+                                  EdgeInsets.only(top: 18, bottom: 18),
+                              icon: Image.asset(
+                                "assets/images/ic_download.png",
+                                height: 20,
+                              ),
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              focusedErrorBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                            ),
+                            onTap: () {
+                              showAnimatedDialog_withCallBack(
+                                  context, PilihBagian("", lap_absen),
+                                  isFlip: true, callback: (value) {
+                                if (value != null) {
+                                  if (value) {
+                                    lap_absen.notifyListeners();
+                                  } else {
+                                    lap_absen.notifyListeners();
+                                    Navigator.pop(context, true);
+                                  }
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        child: Container(
+                          margin:
+                              const EdgeInsets.only(left: 10.0, right: 10.0),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: GreyColor,
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset:
+                                    Offset(1, 2), // changes position of shadow
                               ),
                             ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              lap_absen.select_data(
+                                lap_absen.kd_bagController.text,
+                              );
+                            },
+                            child: Text('TAMPIL'),
                           ),
                         ),
                       ),

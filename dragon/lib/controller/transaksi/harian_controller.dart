@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:dragon/config/config.dart';
 import 'package:dragon/model/data_pegawai.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dragon/model/transaksi/model_harian.dart';
 import 'package:dragon/view/base_widget/toast.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HarianController with ChangeNotifier {
@@ -16,11 +15,11 @@ class HarianController with ChangeNotifier {
   bool proses = false;
   bool isEnable_button = true;
   String selectedDate = '';
-  String dateCount = '';
-  String range = 'Pilih tanggal';
-  String rangeCount = '';
-  String tanggal_awal = "";
-  String tanggal_akhir = "";
+  // String dateCount = '';
+  // String range = 'Pilih tanggal';
+  // String rangeCount = '';
+  // String tanggal_awal = "";
+  // String tanggal_akhir = "";
   int index_terpilih;
 
   ///paginate
@@ -99,42 +98,42 @@ class HarianController with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    if (args.value != null) {
-      if (args.value is PickerDateRange) {
-        if (args.value.startDate != null) {
-          range = DateFormat('dd/MM/yyyy', "id_ID")
-                  .format(args.value.startDate)
-                  .toString() +
-              ' - ' +
-              DateFormat('dd/MM/yyyy', "id_ID")
-                  .format(args.value.endDate ?? args.value.startDate)
-                  .toString();
-        }
-        if (args.value.startDate != null && args.value.endDate != null) {
-          tanggal_awal = DateFormat('yyyy-MM-dd', "id_ID")
-              .format(args.value.startDate)
-              .toString();
-          tanggal_akhir = DateFormat('yyyy-MM-dd', "id_ID")
-              .format(args.value.endDate)
-              .toString();
-          isEnable_button = true;
-        } else {
-          isEnable_button = false;
-        }
-      } else if (args.value is DateTime) {
-        selectedDate = args.value.toString();
-        isEnable_button = false;
-      } else if (args.value is List<DateTime>) {
-        dateCount = args.value.length.toString();
-        isEnable_button = false;
-      } else {
-        rangeCount = args.value.length.toString();
-        isEnable_button = false;
-      }
-      notifyListeners();
-    }
-  }
+  // void onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+  //   if (args.value != null) {
+  //     if (args.value is PickerDateRange) {
+  //       if (args.value.startDate != null) {
+  //         range = DateFormat('dd/MM/yyyy', "id_ID")
+  //                 .format(args.value.startDate)
+  //                 .toString() +
+  //             ' - ' +
+  //             DateFormat('dd/MM/yyyy', "id_ID")
+  //                 .format(args.value.endDate ?? args.value.startDate)
+  //                 .toString();
+  //       }
+  //       if (args.value.startDate != null && args.value.endDate != null) {
+  //         tanggal_awal = DateFormat('yyyy-MM-dd', "id_ID")
+  //             .format(args.value.startDate)
+  //             .toString();
+  //         tanggal_akhir = DateFormat('yyyy-MM-dd', "id_ID")
+  //             .format(args.value.endDate)
+  //             .toString();
+  //         isEnable_button = true;
+  //       } else {
+  //         isEnable_button = false;
+  //       }
+  //     } else if (args.value is DateTime) {
+  //       selectedDate = args.value.toString();
+  //       isEnable_button = false;
+  //     } else if (args.value is List<DateTime>) {
+  //       dateCount = args.value.length.toString();
+  //       isEnable_button = false;
+  //     } else {
+  //       rangeCount = args.value.length.toString();
+  //       isEnable_button = false;
+  //     }
+  //     notifyListeners();
+  //   }
+  // }
 
   // void proses_export() {
   //   if (data_harian_list.length > 0) {
@@ -254,7 +253,10 @@ class HarianController with ChangeNotifier {
   double lainTotal = 0;
   double insentifbulananTotal = 0;
   double jumlahTotal = 0;
-  String per = DateTime.now().toString();
+  String dr = '';
+  String per = DateFormat('MM/yyyy').format(DateTime.now());
+  String kd_grup = "";
+  String nm_grup = "";
   List<DataPegawai> pegawaiList = List<DataPegawai>();
 
   Future<void> initData_addHarian() async {
@@ -298,6 +300,8 @@ class HarianController with ChangeNotifier {
         noid: data_lama[i]['no_id'],
         kd_peg: data_lama[i]['kd_peg'],
         nm_peg: data_lama[i]['nm_peg'],
+        kd_grup: data_lama[i]['kd_grup'],
+        nm_grup: data_lama[i]['nm_grup'],
         ptkp: data_lama[i]['ptkp'],
         hr: double.parse(data_lama[i]['hr'].toString()) ?? 0.00,
         jam1: double.parse(data_lama[i]['jam1'].toString()) ?? 0.00,
@@ -325,6 +329,8 @@ class HarianController with ChangeNotifier {
   void addKeranjang(DataPegawai mPegawai) {
     // m_barang.stok_booking = 1;
     data_pegawai_keranjang.add(mPegawai);
+    kd_grup = mPegawai.kd_grup;
+    nm_grup = mPegawai.nm_grup;
     sumQty += 1;
     hrTotal += mPegawai.hr ?? 0.00;
     jam1Total += mPegawai.jam1 ?? 0.00;
@@ -384,7 +390,12 @@ class HarianController with ChangeNotifier {
               kd_bagController.text;
           obj['kd_bag'] = kd_bagController.text;
           obj['nm_bag'] = nm_bagController.text;
+          obj['kd_grup'] = kd_grup;
+          obj['nm_grup'] = nm_grup;
           obj['notes'] = notesController.text;
+          obj['dr'] = dr;
+          obj['flag'] = "HR";
+          obj['per'] = per;
           obj['tabeld'] = await baca_tabeld();
           await m_order.insert_harian(obj);
           BotToast.closeAllLoading();
@@ -448,9 +459,14 @@ class HarianController with ChangeNotifier {
       double insentifbulanan = data_pegawai_keranjang[i].insentifbulanan;
       double jumlah = data_pegawai_keranjang[i].jumlah;
       Map obj = new Map();
+      obj['flag'] = "HR";
       obj['kd_bag'] = kd_bagController.text;
+      obj['nm_bag'] = nm_bagController.text;
       obj['kd_peg'] = data_pegawai_keranjang[i].kd_peg;
       obj['nm_peg'] = data_pegawai_keranjang[i].nm_peg;
+      obj['kd_grup'] = kd_grup;
+      obj['nm_grup'] = nm_grup;
+      obj['dr'] = dr;
       obj['ptkp'] = data_pegawai_keranjang[i].ptkp;
       obj['hr'] = hr ?? 0.00;
       obj['jam1'] = jam1 ?? 0.00;
@@ -460,6 +476,7 @@ class HarianController with ChangeNotifier {
       obj['lain'] = lain ?? 0.00;
       obj['insentifbulanan'] = insentifbulanan ?? 0.00;
       obj['jumlah'] = jumlah ?? 0.00;
+      obj['per'] = per;
       pegawaiList.add(obj);
     }
     return pegawaiList;

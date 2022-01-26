@@ -17,6 +17,8 @@ module.exports = function (app) {
     // ================Widget Pilih==================
     app.route('/data_bagian')
         .post(jsonku.data_bagian);
+    app.route('/data_grup')
+        .post(jsonku.data_grup);
 
     //==================MASTER======================= 
     app.route('/sp_bagian_paginate')

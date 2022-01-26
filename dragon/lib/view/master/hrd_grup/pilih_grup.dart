@@ -1,35 +1,35 @@
-import 'package:dragon/controller/pilih_bagian_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dragon/config/color.dart';
-import 'package:dragon/controller/laporan/absen_lemburan_controller.dart';
+import 'package:dragon/controller/pilih_grup_controller.dart';
+import 'package:dragon/controller/master/hrd_grup_controller.dart';
 import 'package:dragon/view/base_widget/toast.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-class PilihBagian extends StatefulWidget {
-  String bagian_terpilih;
+class PilihGrup extends StatefulWidget {
+  String grup_terpilih;
   var controller;
 
-  PilihBagian(this.bagian_terpilih, this.controller);
+  PilihGrup(this.grup_terpilih, this.controller);
 
   @override
-  _PilihBagianState createState() => _PilihBagianState();
+  _PilihGrupState createState() => _PilihGrupState();
 }
 
-class _PilihBagianState extends State<PilihBagian> {
+class _PilihGrupState extends State<PilihGrup> {
   int index_terpilih;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
-    Provider.of<PilihBagianController>(context, listen: false).initData('');
+    Provider.of<PilihGrupController>(context, listen: false).initData('');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PilihBagianController>(
-        builder: (context, bagianController, child) {
+    return Consumer<PilihGrupController>(
+        builder: (context, grupController, child) {
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Container(
@@ -38,7 +38,7 @@ class _PilihBagianState extends State<PilihBagian> {
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Text("PILIH BAGIAN",
+              child: Text("PILIH GRUP",
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -78,7 +78,7 @@ class _PilihBagianState extends State<PilihBagian> {
                       disabledBorder: InputBorder.none,
                     ),
                     onChanged: (value) {
-                      bagianController.initData(value);
+                      grupController.initData(value);
                     },
                   ),
                 ),
@@ -94,7 +94,7 @@ class _PilihBagianState extends State<PilihBagian> {
                   Expanded(
                     flex: 3,
                     child: Text(
-                      "Kode Bagian",
+                      "Kode Grup",
                       style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -104,7 +104,7 @@ class _PilihBagianState extends State<PilihBagian> {
                   Expanded(
                     flex: 6,
                     child: Text(
-                      "Nama Bagian",
+                      "Nama Grup",
                       style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -119,9 +119,9 @@ class _PilihBagianState extends State<PilihBagian> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: bagianController.data_bagianList.length,
+                itemCount: grupController.data_grupList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return BagianCard(index);
+                  return GrupCard(index);
                 },
               ),
             ),
@@ -150,11 +150,18 @@ class _PilihBagianState extends State<PilihBagian> {
                   child: InkWell(
                 onTap: () async {
                   if (index_terpilih != null) {
-                    Provider.of<AbsenLemburanController>(context, listen: false)
-                            .kd_bagController
+                    Provider.of<HRD_GrupController>(context, listen: false)
+                            .kd_grupController
                             .text =
-                        bagianController.data_bagianList[index_terpilih]
-                            ['kd_bag'];
+                        grupController.data_grupList[index_terpilih]['kd_grup'];
+                    Provider.of<HRD_GrupController>(context, listen: false)
+                            .nm_grupController
+                            .text =
+                        grupController.data_grupList[index_terpilih]['nm_grup'];
+                    Provider.of<HRD_GrupController>(context, listen: false)
+                            .acnoController
+                            .text =
+                        grupController.data_grupList[index_terpilih]['acno'];
                     Navigator.pop(context);
                   } else {
                     Toast("Peringatan", "Belum ada data terpilih", false);
@@ -183,12 +190,12 @@ class _PilihBagianState extends State<PilihBagian> {
     });
   }
 
-  Widget BagianCard(int index) {
+  Widget GrupCard(int index) {
     bool isActive = index == index_terpilih;
-    var data_bagian = Provider.of<PilihBagianController>(context, listen: false)
-        .data_bagianList[index];
-    if (widget.bagian_terpilih != null) {
-      if (data_bagian['NAMAS'] == widget.bagian_terpilih) {
+    var data_grup = Provider.of<PilihGrupController>(context, listen: false)
+        .data_grupList[index];
+    if (widget.grup_terpilih != null) {
+      if (data_grup['NAMAS'] == widget.grup_terpilih) {
         isActive = true;
         index_terpilih = index;
       }
@@ -196,7 +203,7 @@ class _PilihBagianState extends State<PilihBagian> {
     return InkWell(
       onTap: () {
         index_terpilih = index;
-        widget.bagian_terpilih = data_bagian['NAMAS'];
+        widget.grup_terpilih = data_grup['NAMAS'];
         setState(() {});
       },
       child: Container(
@@ -209,7 +216,7 @@ class _PilihBagianState extends State<PilihBagian> {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    data_bagian['kd_bag'].toString(),
+                    data_grup['kd_grup'].toString(),
                     style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -219,7 +226,7 @@ class _PilihBagianState extends State<PilihBagian> {
                 Expanded(
                   flex: 6,
                   child: Text(
-                    data_bagian['nm_bag'],
+                    data_grup['nm_grup'],
                     style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,

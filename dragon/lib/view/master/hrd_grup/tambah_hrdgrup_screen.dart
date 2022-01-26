@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dragon/config/animation_custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dragon/config/OnHoverButton.dart';
 import 'package:dragon/config/color.dart';
 import 'package:dragon/controller/master/hrd_grup_controller.dart';
+import 'package:dragon/view/master/hrd_grup/pilih_grup.dart';
 import 'package:provider/provider.dart';
 
 class TambahHRDgrupScreen extends StatefulWidget {
@@ -123,6 +124,21 @@ class _TambahHRDgrupScreenState extends State<TambahHRDgrupScreen> {
                                           enabledBorder: InputBorder.none,
                                           disabledBorder: InputBorder.none,
                                         ),
+                                        onTap: () {
+                                          showAnimatedDialog(
+                                              context,
+                                              PilihGrup(
+                                                  hrdgrupController
+                                                          .kd_grupController
+                                                          .text
+                                                          .isEmpty
+                                                      ? null
+                                                      : hrdgrupController
+                                                          .nm_grupController
+                                                          .text,
+                                                  hrdgrupController),
+                                              isFlip: false);
+                                        },
                                       ),
                                     ),
                                   ],

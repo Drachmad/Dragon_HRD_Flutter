@@ -1,12 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dragon/config/color.dart';
 import 'package:dragon/config/animation_custom_dialog.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:dragon/config/OnHoverButton.dart';
 import 'package:dragon/controller/master/hrd_pegawai_controller.dart';
 import 'package:dragon/view/master/hrd_pegawai/pilih_bagian.dart';
-import 'package:provider/provider.dart';
 
 Widget MainPegawai(
     BuildContext context, HRD_PegawaiController pegawaiController) {

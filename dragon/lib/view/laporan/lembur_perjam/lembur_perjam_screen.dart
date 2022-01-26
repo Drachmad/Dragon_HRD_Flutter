@@ -422,7 +422,7 @@ class MyData extends DataTableSource {
       ),
       DataCell(
         Text(
-          dtx[index]['TGL'].toString().substring(0, 10),
+          dtx[index]['TGL'].substring(0, 10),
           style: TextStyle(color: Colors.black),
         ),
       ),
