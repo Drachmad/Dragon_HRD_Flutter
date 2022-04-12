@@ -9,7 +9,7 @@ import 'package:dragon/view/base_widget/mode_export.dart';
 import 'package:dragon/view/base_widget/notif_hapus.dart';
 import 'package:dragon/view/base_widget/toast.dart';
 import 'package:dragon/view/transaksi/kik_jahit/add_kik_jahit_screen.dart';
-import 'package:dragon/view/transaksi/kik_jahit/widget/kik_jahit_card.dart';
+import 'package:dragon/view/transaksi/kik_jahit/kik_jahit_card.dart';
 import 'package:provider/provider.dart';
 
 class KikJahitScreen extends StatefulWidget {
@@ -66,47 +66,47 @@ class _KikJahitScreenState extends State<KikJahitScreen> {
             ),
           ),
           actions: [
-            if (Provider.of<LoginController>(context, listen: false).ROLE == 1)
-              OnHoverButton(
-                child: InkWell(
-                  hoverColor: Colors.transparent,
-                  onTap: () {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => AddKikJahitScreen(false)))
-                        .then((value) {
-                      if (value != null) {
-                        if (value) {
-                          kik_jahitController.selectDataPaginate(true, '');
-                        }
+            // if (Provider.of<LoginController>(context, listen: false).ROLE == 1)
+            OnHoverButton(
+              child: InkWell(
+                hoverColor: Colors.transparent,
+                onTap: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => AddKikJahitScreen(false)))
+                      .then((value) {
+                    if (value != null) {
+                      if (value) {
+                        kik_jahitController.selectDataPaginate(true, '');
                       }
-                    });
-                  },
-                  child: Container(
-                    height: 30,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          "assets/images/ic_add.png",
-                          height: 30,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          "Tambah Baru",
-                          style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black),
-                        ),
-                      ],
-                    ),
+                    }
+                  });
+                },
+                child: Container(
+                  height: 30,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        "assets/images/ic_add.png",
+                        height: 30,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "Tambah Baru",
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black),
+                      ),
+                    ],
                   ),
                 ),
               ),
+            ),
             SizedBox(
               width: 16,
             ),
@@ -114,16 +114,7 @@ class _KikJahitScreenState extends State<KikJahitScreen> {
               child: InkWell(
                 hoverColor: Colors.white,
                 onTap: () {
-                  showAnimatedDialog_withCallBack(context, ModeExport(1),
-                      isFlip: true, callback: (value) {
-                    if (value != null) {
-                      if (value == 1) {
-                        // kik_jahitController.proses_export_detail();
-                      } else if (value == 2) {
-                        // kik_jahitController.proses_export();
-                      }
-                    }
-                  });
+                  kik_jahitController.report_tes();
                 },
                 child: Container(
                   height: 30,
@@ -149,46 +140,46 @@ class _KikJahitScreenState extends State<KikJahitScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              width: 16,
-            ),
-            OnHoverButton(
-              child: InkWell(
-                hoverColor: Colors.white,
-                onTap: () {
-                  if (kik_jahitController.index_terpilih != null) {
-                    // kik_jahitController.proses_print();
-                  } else {
-                    Toast(
-                        "Peringatan",
-                        "Silahkan pilih satu transaksi untuk di cetak !",
-                        false);
-                  }
-                },
-                child: Container(
-                  height: 30,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        "assets/images/ic_print.png",
-                        height: 30,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        "Cetak Invoice",
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   width: 16,
+            // ),
+            // OnHoverButton(
+            //   child: InkWell(
+            //     hoverColor: Colors.white,
+            //     onTap: () {
+            //       if (kik_jahitController.index_terpilih != null) {
+            //         // kik_jahitController.proses_print();
+            //       } else {
+            //         Toast(
+            //             "Peringatan",
+            //             "Silahkan pilih satu transaksi untuk di cetak !",
+            //             false);
+            //       }
+            //     },
+            //     child: Container(
+            //       height: 30,
+            //       child: Row(
+            //         mainAxisSize: MainAxisSize.min,
+            //         children: [
+            //           Image.asset(
+            //             "assets/images/ic_print.png",
+            //             height: 30,
+            //           ),
+            //           SizedBox(
+            //             width: 8,
+            //           ),
+            //           Text(
+            //             "Cetak Invoice",
+            //             style: GoogleFonts.poppins(
+            //                 fontSize: 14,
+            //                 fontWeight: FontWeight.w400,
+            //                 color: Colors.black),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               width: 16,
             ),

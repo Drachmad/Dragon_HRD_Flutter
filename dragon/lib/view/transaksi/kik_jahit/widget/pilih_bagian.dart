@@ -33,7 +33,7 @@ class _PilihBagianState extends State<PilihBagian> {
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Container(
-          width: MediaQuery.of(context).size.width / 2.5,
+          width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height - 100,
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Padding(
@@ -111,6 +111,46 @@ class _PilihBagianState extends State<PilihBagian> {
                           color: GreyColor),
                     ),
                   ),
+                  Expanded(
+                    flex: 6,
+                    child: Text(
+                      "Nama Grup",
+                      style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: GreyColor),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      "Kode Grup",
+                      style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: GreyColor),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      "KIK Grup",
+                      style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: GreyColor),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      "Dragon",
+                      style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: GreyColor),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -160,6 +200,13 @@ class _PilihBagianState extends State<PilihBagian> {
                             .text =
                         bagianController.data_bagianList[index_terpilih]
                             ['nm_bag'];
+                    Provider.of<KikJahitController>(context, listen: false)
+                            .kik_grupController
+                            .text =
+                        bagianController.data_bagianList[index_terpilih]
+                            ['kik_grup'];
+                    Provider.of<KikJahitController>(context, listen: false)
+                        .initData_KIK();
                     Navigator.pop(context);
                   } else {
                     Toast("Peringatan", "Belum ada data terpilih", false);
@@ -225,6 +272,46 @@ class _PilihBagianState extends State<PilihBagian> {
                   flex: 6,
                   child: Text(
                     data_bagian['nm_bag'],
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isActive ? Colors.white : Colors.black),
+                  ),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: Text(
+                    data_bagian['nm_grup'],
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isActive ? Colors.white : Colors.black),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    data_bagian['kd_grup'],
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isActive ? Colors.white : Colors.black),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    data_bagian['kik_grup'],
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isActive ? Colors.white : Colors.black),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    data_bagian['dr'],
                     style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,

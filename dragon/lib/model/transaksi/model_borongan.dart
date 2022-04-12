@@ -1,12 +1,8 @@
-import 'package:dragon/mysql/koneksi_mysql.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:dragon/constants.dart';
 
 class model_borongan {
-  static String table = 'hrd_absen';
-  static String table_detail = 'hrd_absend';
-  koneksi_mysql m_koneksi = koneksi_mysql();
   String baseUrl = base_url;
 
   ///paginate
@@ -34,16 +30,6 @@ class model_borongan {
     return results2['data'].toList();
   }
 
-  // ///SELECT HEADER
-  // Future<List> select_borongan(String cari) async {
-  //   final response = await http.post(
-  //     Uri.parse("${baseUrl}:3000/tampil_borongan"),
-  //     body: {"cari": cari},
-  //   );
-  //   var results2 = json.decode(response.body);
-  //   return results2['data'].toList();
-  // }
-
   Future<List> insert_borongan(Map data_insert) async {
     try {
       ///DATA HEADER
@@ -54,6 +40,17 @@ class model_borongan {
           "no_bukti": data_insert['no_bukti'].toString(),
           "kd_bag": data_insert['kd_bag'].toString(),
           "nm_bag": data_insert['nm_bag'].toString(),
+          "kd_grup": data_insert['kd_grup'].toString(),
+          "flag": data_insert['flag'].toString(),
+          "dr": data_insert['dr'].toString(),
+          "per": data_insert['per'].toString(),
+          "total_kik": data_insert['total_kik'].toString(),
+          "lain": data_insert['lain'].toString(),
+          "tot_bon": data_insert['tot_bon'].toString(),
+          "other": data_insert['other'].toString(),
+          "kik_net": data_insert['kik_net'].toString(),
+          "tms": data_insert['tms'].toString(),
+          "premi": data_insert['premi'].toString(),
           "notes": data_insert['notes'].toString(),
         },
       );
@@ -67,17 +64,23 @@ class model_borongan {
           Uri.parse("${baseUrl}:3000/tambah_detail_borongan"),
           body: {
             "no_bukti": data_insert['no_bukti'].toString(),
-            "kd_bag": data_detail[i]['kd_bag'].toString(),
+            "flag": data_insert['flag'].toString(),
+            "dr": data_insert['dr'].toString(),
+            "per": data_insert['per'].toString(),
+            "nm_bag": data_insert['nm_bag'].toString(),
+            "kd_bag": data_insert['kd_bag'].toString(),
             "kd_peg": data_detail[i]['kd_peg'].toString(),
             "nm_peg": data_detail[i]['nm_peg'].toString(),
             "ptkp": data_detail[i]['ptkp'].toString(),
+            "st": data_detail[i]['st'].toString(),
+            "ms": data_detail[i]['ms'].toString(),
             "hr": data_detail[i]['hr'].toString(),
-            "jam1": data_detail[i]['jam1'].toString(),
-            "jam2": data_detail[i]['jam2'].toString(),
-            "jam1rp": data_detail[i]['jam1rp'].toString(),
-            "jam2rp": data_detail[i]['jam2rp'].toString(),
-            "lain": data_detail[i]['lain'].toString(),
-            "insentifbulanan": data_detail[i]['insentifbulanan'].toString(),
+            "ik": data_detail[i]['ik'].toString(),
+            "nb": data_detail[i]['nb'].toString(),
+            "upah": data_detail[i]['upah'].toString(),
+            "bon": data_detail[i]['bon'].toString(),
+            "subsidi": data_detail[i]['subsidi'].toString(),
+            "sub": data_detail[i]['sub'].toString(),
             "jumlah": data_detail[i]['jumlah'].toString(),
           },
         );
@@ -106,6 +109,14 @@ class model_borongan {
           "no_bukti": data_insert['no_bukti'].toString(),
           "kd_bag": data_insert['kd_bag'].toString(),
           "nm_bag": data_insert['nm_bag'].toString(),
+          "kd_grup": data_insert['kd_grup'].toString(),
+          "total_kik": data_insert['total_kik'].toString(),
+          "lain": data_insert['lain'].toString(),
+          "tot_bon": data_insert['tot_bon'].toString(),
+          "other": data_insert['other'].toString(),
+          "kik_net": data_insert['kik_net'].toString(),
+          "tms": data_insert['tms'].toString(),
+          "premi": data_insert['premi'].toString(),
           "notes": data_insert['notes'].toString(),
         },
       );
@@ -119,17 +130,23 @@ class model_borongan {
           Uri.parse("${baseUrl}:3000/tambah_detail_borongan"),
           body: {
             "no_bukti": data_insert['no_bukti'].toString(),
-            "kd_bag": data_detail[i]['kd_bag'].toString(),
+            "flag": data_insert['flag'].toString(),
+            "dr": data_insert['dr'].toString(),
+            "per": data_insert['per'].toString(),
+            "kd_bag": data_insert['kd_bag'].toString(),
+            "nm_bag": data_insert['nm_bag'].toString(),
             "kd_peg": data_detail[i]['kd_peg'].toString(),
             "nm_peg": data_detail[i]['nm_peg'].toString(),
             "ptkp": data_detail[i]['ptkp'].toString(),
+            "st": data_detail[i]['st'].toString(),
+            "ms": data_detail[i]['ms'].toString(),
             "hr": data_detail[i]['hr'].toString(),
-            "jam1": data_detail[i]['jam1'].toString(),
-            "jam2": data_detail[i]['jam2'].toString(),
-            "jam1rp": data_detail[i]['jam1rp'].toString(),
-            "jam2rp": data_detail[i]['jam2rp'].toString(),
-            "lain": data_detail[i]['lain'].toString(),
-            "insentifbulanan": data_detail[i]['insentifbulanan'].toString(),
+            "ik": data_detail[i]['ik'].toString(),
+            "nb": data_detail[i]['nb'].toString(),
+            "upah": data_detail[i]['upah'].toString(),
+            "bon": data_detail[i]['bon'].toString(),
+            "subsidi": data_detail[i]['subsidi'].toString(),
+            "sub": data_detail[i]['sub'].toString(),
             "jumlah": data_detail[i]['jumlah'].toString(),
           },
         );
@@ -160,13 +177,18 @@ class model_borongan {
     return results2['data'].toList();
   }
 
-  Future<List> delete_borongan(String no_bukti) async {
-    var konek = await m_koneksi.koneksi();
-    var results1 =
-        await konek.query("delete from $table where no_bukti = '$no_bukti';");
-    var results2 = await konek
-        .query("delete from $table_detail where no_bukti = '$no_bukti';");
-    await konek.close();
-    return results2.toList();
+  Future delete_borongan(String no_bukti) async {
+    try {
+      await http.post(
+        Uri.parse("${baseUrl}:3000/hapus_borongan"),
+        body: {"tabel": "hrd_absen", "no_bukti": no_bukti},
+      );
+      await http.post(
+        Uri.parse("${baseUrl}:3000/hapus_borongan"),
+        body: {"tabel": "hrd_absend", "no_bukti": no_bukti},
+      );
+    } catch (e) {
+      return false;
+    }
   }
 }

@@ -4,13 +4,22 @@ import 'package:http/http.dart' as http;
 
 class DataPegawai {
   String baseUrl = base_url;
-  int noid;
+  int no_id;
   String kd_peg;
   String nm_peg;
   String kd_grup;
   String nm_grup;
   String ptkp;
+  String st;
+  double ms;
   double hr;
+  double ik;
+  double nb;
+  double upah;
+  double bon;
+  double subsidi;
+  double sub;
+  double harian;
   double jam1;
   double jam2;
   double jam1rp;
@@ -20,13 +29,22 @@ class DataPegawai {
   double jumlah;
 
   DataPegawai({
-    this.noid,
+    this.no_id,
     this.kd_peg,
     this.nm_peg,
     this.kd_grup,
     this.nm_grup,
     this.ptkp,
+    this.st,
+    this.ms,
     this.hr,
+    this.ik,
+    this.nb,
+    this.upah,
+    this.bon,
+    this.subsidi,
+    this.sub,
+    this.harian,
     this.jam1,
     this.jam2,
     this.jam1rp,
@@ -38,13 +56,22 @@ class DataPegawai {
 
   factory DataPegawai.fromJson(var parsedJson) {
     return DataPegawai(
-      noid: parsedJson['no_id'],
+      no_id: parsedJson['no_id'],
       kd_peg: parsedJson['kd_peg'] as String,
       nm_peg: parsedJson['nm_peg'] as String,
       kd_grup: parsedJson['kd_grup'] as String,
       nm_grup: parsedJson['nm_grup'] as String,
       ptkp: parsedJson['ptkp'] as String ?? "",
+      st: parsedJson['status_pegawai'] as String ?? "",
+      ms: parsedJson['ms'].toDouble() ?? 0.00,
       hr: parsedJson['hr'] ?? 0.00,
+      ik: parsedJson['ik'] ?? 0.00,
+      nb: parsedJson['nb'] ?? 0.00,
+      upah: parsedJson['nett'].toDouble() ?? 0.00,
+      bon: parsedJson['bon'] ?? 0.00,
+      subsidi: parsedJson['subsidi'] ?? 0.00,
+      sub: parsedJson['sub'] ?? 0.00,
+      harian: parsedJson['harian'] ?? 0.00,
       jam1: parsedJson['jam1'] ?? 0.00,
       jam2: parsedJson['jam2'] ?? 0.00,
       jam1rp: parsedJson['jam1rp'] ?? 0.00,

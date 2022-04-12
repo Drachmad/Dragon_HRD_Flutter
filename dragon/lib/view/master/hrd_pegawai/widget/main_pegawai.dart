@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:dragon/config/color.dart';
 import 'package:dragon/config/animation_custom_dialog.dart';
 import 'package:dragon/controller/master/hrd_pegawai_controller.dart';
-import 'package:dragon/view/master/hrd_pegawai/pilih_bagian.dart';
+import 'package:dragon/view/master/hrd_pegawai/widget/pilih_bagian.dart';
+
+// Default Drop Down Item.
+String jkValue = 'Laki - Laki';
+
+List<String> jk = ['Laki - Laki', 'Perempuan'];
 
 Widget MainPegawai(
     BuildContext context, HRD_PegawaiController pegawaiController) {
@@ -263,22 +268,36 @@ Widget MainPegawai(
                         ),
                         Container(
                           height: 40,
+                          width: double.infinity,
                           decoration: BoxDecoration(
                             border: Border.all(color: GreyColor),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: TextFormField(
-                            controller: pegawaiController.jkController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(top: 18, bottom: 18),
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              focusedErrorBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                value: jkValue,
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                                onChanged: (String data) {
+                                  jkValue = data;
+                                  pegawaiController.jk =
+                                      (jkValue == "Laki -Laki") ? "L" : "P";
+                                  pegawaiController.notifyListeners();
+                                },
+                                items: jk.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
                         ),

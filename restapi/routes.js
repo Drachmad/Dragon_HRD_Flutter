@@ -2,6 +2,7 @@
 
 module.exports = function (app) {
     var jsonku = require('./controller');
+    var master = require('./master/controller');
 
     app.route('/')
         .get(jsonku.index);
@@ -11,7 +12,10 @@ module.exports = function (app) {
         .post(jsonku.tampil_account);
     app.route('/indeks_pegawai')
         .post(jsonku.tampil_pegawai);
-
+    app.route('/indeks_kik')
+        .post(jsonku.tampil_kik);
+    app.route('/indeks_premi')
+        .post(jsonku.tampil_premi);
 
 
     // ================Widget Pilih==================
@@ -55,59 +59,61 @@ module.exports = function (app) {
         .post(jsonku.hapus_sp_inventori);
 
     app.route('/hrd_pegawai_paginate')
-        .post(jsonku.hrd_pegawai_paginate);
+        .post(master.hrd_pegawai_paginate);
     app.route('/count_hrd_pegawai_paginate')
-        .post(jsonku.count_hrd_pegawai_paginate);
+        .post(master.count_hrd_pegawai_paginate);
     app.route('/tambah_hrd_pegawai')
-        .post(jsonku.tambah_hrd_pegawai);
+        .post(master.tambah_hrd_pegawai);
     app.route('/ubah_hrd_pegawai')
-        .post(jsonku.ubah_hrd_pegawai);
+        .post(master.ubah_hrd_pegawai);
     app.route('/hapus_hrd_pegawai')
-        .post(jsonku.hapus_hrd_pegawai);
+        .post(master.hapus_hrd_pegawai);
 
     app.route('/hrd_bagian_paginate')
-        .post(jsonku.hrd_bagian_paginate);
+        .post(master.hrd_bagian_paginate);
     app.route('/count_hrd_bagian_paginate')
-        .post(jsonku.count_hrd_bagian_paginate);
+        .post(master.count_hrd_bagian_paginate);
     app.route('/tambah_hrd_bagian')
-        .post(jsonku.tambah_hrd_bagian);
+        .post(master.tambah_hrd_bagian);
     app.route('/ubah_hrd_bagian')
-        .post(jsonku.ubah_hrd_bagian);
+        .post(master.ubah_hrd_bagian);
     app.route('/hapus_hrd_bagian')
-        .post(jsonku.hapus_hrd_bagian);
+        .post(master.hapus_hrd_bagian);
 
     app.route('/hrd_borongan_paginate')
-        .post(jsonku.hrd_borongan_paginate);
+        .post(master.hrd_borongan_paginate);
     app.route('/count_hrd_borongan_paginate')
-        .post(jsonku.count_hrd_borongan_paginate);
+        .post(master.count_hrd_borongan_paginate);
     app.route('/tambah_hrd_borongan')
-        .post(jsonku.tambah_hrd_borongan);
+        .post(master.tambah_hrd_borongan);
     app.route('/ubah_hrd_borongan')
-        .post(jsonku.ubah_hrd_borongan);
+        .post(master.ubah_hrd_borongan);
     app.route('/hapus_hrd_borongan')
-        .post(jsonku.hapus_hrd_borongan);
+        .post(master.hapus_hrd_borongan);
 
     app.route('/hrd_grup_paginate')
-        .post(jsonku.hrd_grup_paginate);
+        .post(master.hrd_grup_paginate);
     app.route('/count_hrd_grup_paginate')
-        .post(jsonku.count_hrd_grup_paginate);
+        .post(master.count_hrd_grup_paginate);
     app.route('/tambah_hrd_grup')
-        .post(jsonku.tambah_hrd_grup);
+        .post(master.tambah_hrd_grup);
     app.route('/ubah_hrd_grup')
-        .post(jsonku.ubah_hrd_grup);
+        .post(master.ubah_hrd_grup);
     app.route('/hapus_hrd_grup')
-        .post(jsonku.hapus_hrd_grup);
+        .post(master.hapus_hrd_grup);
 
     app.route('/hrd_model_paginate')
-        .post(jsonku.hrd_model_paginate);
+        .post(master.hrd_model_paginate);
     app.route('/count_hrd_model_paginate')
-        .post(jsonku.count_hrd_model_paginate);
-    app.route('/tambah_hrd_model')
-        .post(jsonku.tambah_hrd_model);
-    app.route('/ubah_hrd_model')
-        .post(jsonku.ubah_hrd_model);
+        .post(master.count_hrd_model_paginate);
+    app.route('/tambah_header_hrd_model')
+        .post(master.tambah_header_hrd_model);
+    app.route('/tambah_detail_hrd_model')
+        .post(master.tambah_detail_hrd_model);
+    app.route('/ubah_header_hrd_model')
+        .post(master.ubah_header_hrd_model);
     app.route('/hapus_hrd_model')
-        .post(jsonku.hapus_hrd_model);
+        .post(master.hapus_hrd_model);
 
     app.route('/pembelian_supplier_paginate')
         .post(jsonku.pembelian_supplier_paginate);
@@ -179,6 +185,8 @@ module.exports = function (app) {
     ///LAPORAN LEMBUR PER JAM
     app.route('/lap_lembur_perjam')
         .post(jsonku.lap_lembur_perjam);
+    app.route('/lap_gaji_harian')
+        .post(jsonku.lap_gaji_harian);
 
     // =====================TRANSAKSI========================
     ///TRANSAKSI HEADER DETAIL HARIAN
@@ -222,6 +230,232 @@ module.exports = function (app) {
         .post(jsonku.tambah_detail_kik_jahit);
     app.route('/edit_header_kik_jahit')
         .post(jsonku.edit_header_kik_jahit);
+    app.route('/urut_nobukti_kik_jahit')
+        .post(jsonku.urut_nobukti_kik_jahit);
+
+    ///TRANSAKSI HEADER DETAIL KIK JUKI
+    app.route('/kik_juki_paginate')
+        .post(jsonku.kik_juki_paginate);
+    app.route('/count_kik_juki_paginate')
+        .post(jsonku.count_kik_juki_paginate);
+    app.route('/tambah_header_kik_juki')
+        .post(jsonku.tambah_header_kik_juki);
+    app.route('/hapus_kik_juki')
+        .post(jsonku.hapus_kik_juki);
+    app.route('/tambah_detail_kik_juki')
+        .post(jsonku.tambah_detail_kik_juki);
+    app.route('/edit_header_kik_juki')
+        .post(jsonku.edit_header_kik_juki);
+    app.route('/urut_nobukti_kik_juki')
+        .post(jsonku.urut_nobukti_kik_juki);
+
+    ///TRANSAKSI HEADER DETAIL KIK KSP
+    app.route('/kik_ksp_paginate')
+        .post(jsonku.kik_ksp_paginate);
+    app.route('/count_kik_ksp_paginate')
+        .post(jsonku.count_kik_ksp_paginate);
+    app.route('/tambah_header_kik_ksp')
+        .post(jsonku.tambah_header_kik_ksp);
+    app.route('/hapus_kik_ksp')
+        .post(jsonku.hapus_kik_ksp);
+    app.route('/tambah_detail_kik_ksp')
+        .post(jsonku.tambah_detail_kik_ksp);
+    app.route('/edit_header_kik_ksp')
+        .post(jsonku.edit_header_kik_ksp);
+    app.route('/urut_nobukti_kik_ksp')
+        .post(jsonku.urut_nobukti_kik_ksp);
+
+    ///TRANSAKSI HEADER DETAIL KIK PACKING
+    app.route('/kik_packing_paginate')
+        .post(jsonku.kik_packing_paginate);
+    app.route('/count_kik_packing_paginate')
+        .post(jsonku.count_kik_packing_paginate);
+    app.route('/tambah_header_kik_packing')
+        .post(jsonku.tambah_header_kik_packing);
+    app.route('/hapus_kik_packing')
+        .post(jsonku.hapus_kik_packing);
+    app.route('/tambah_detail_kik_packing')
+        .post(jsonku.tambah_detail_kik_packing);
+    app.route('/edit_header_kik_packing')
+        .post(jsonku.edit_header_kik_packing);
+    app.route('/urut_nobukti_kik_packing')
+        .post(jsonku.urut_nobukti_kik_packing);
+
+    ///TRANSAKSI HEADER DETAIL KIK PLONG
+    app.route('/kik_plong_paginate')
+        .post(jsonku.kik_plong_paginate);
+    app.route('/count_kik_plong_paginate')
+        .post(jsonku.count_kik_plong_paginate);
+    app.route('/tambah_header_kik_plong')
+        .post(jsonku.tambah_header_kik_plong);
+    app.route('/hapus_kik_plong')
+        .post(jsonku.hapus_kik_plong);
+    app.route('/tambah_detail_kik_plong')
+        .post(jsonku.tambah_detail_kik_plong);
+    app.route('/edit_header_kik_plong')
+        .post(jsonku.edit_header_kik_plong);
+    app.route('/urut_nobukti_kik_plong')
+        .post(jsonku.urut_nobukti_kik_plong);
+
+    ///TRANSAKSI HEADER DETAIL KIK SABLON
+    app.route('/kik_sablon_paginate')
+        .post(jsonku.kik_sablon_paginate);
+    app.route('/count_kik_sablon_paginate')
+        .post(jsonku.count_kik_sablon_paginate);
+    app.route('/tambah_header_kik_sablon')
+        .post(jsonku.tambah_header_kik_sablon);
+    app.route('/hapus_kik_sablon')
+        .post(jsonku.hapus_kik_sablon);
+    app.route('/tambah_detail_kik_sablon')
+        .post(jsonku.tambah_detail_kik_sablon);
+    app.route('/edit_header_kik_sablon')
+        .post(jsonku.edit_header_kik_sablon);
+    app.route('/urut_nobukti_kik_sablon')
+        .post(jsonku.urut_nobukti_kik_sablon);
+
+    ///TRANSAKSI HEADER DETAIL KIK INJECTION
+    app.route('/kik_injection_paginate')
+        .post(jsonku.kik_injection_paginate);
+    app.route('/count_kik_injection_paginate')
+        .post(jsonku.count_kik_injection_paginate);
+    app.route('/tambah_header_kik_injection')
+        .post(jsonku.tambah_header_kik_injection);
+    app.route('/hapus_kik_injection')
+        .post(jsonku.hapus_kik_injection);
+    app.route('/tambah_detail_kik_injection')
+        .post(jsonku.tambah_detail_kik_injection);
+    app.route('/edit_header_kik_injection')
+        .post(jsonku.edit_header_kik_injection);
+    app.route('/urut_nobukti_kik_injection')
+        .post(jsonku.urut_nobukti_kik_injection);
+
+    ///TRANSAKSI HEADER DETAIL KIK ASSEMBLING
+    app.route('/kik_assembling_paginate')
+        .post(jsonku.kik_assembling_paginate);
+    app.route('/count_kik_assembling_paginate')
+        .post(jsonku.count_kik_assembling_paginate);
+    app.route('/tambah_header_kik_assembling')
+        .post(jsonku.tambah_header_kik_assembling);
+    app.route('/hapus_kik_assembling')
+        .post(jsonku.hapus_kik_assembling);
+    app.route('/tambah_detail_kik_assembling')
+        .post(jsonku.tambah_detail_kik_assembling);
+    app.route('/edit_header_kik_assembling')
+        .post(jsonku.edit_header_kik_assembling);
+    app.route('/urut_nobukti_kik_assembling')
+        .post(jsonku.urut_nobukti_kik_assembling);
+
+    ///TRANSAKSI HEADER DETAIL KIK CAT SPRAY
+    app.route('/kik_catspray_paginate')
+        .post(jsonku.kik_catspray_paginate);
+    app.route('/count_kik_catspray_paginate')
+        .post(jsonku.count_kik_catspray_paginate);
+    app.route('/tambah_header_kik_catspray')
+        .post(jsonku.tambah_header_kik_catspray);
+    app.route('/hapus_kik_catspray')
+        .post(jsonku.hapus_kik_catspray);
+    app.route('/tambah_detail_kik_catspray')
+        .post(jsonku.tambah_detail_kik_catspray);
+    app.route('/edit_header_kik_catspray')
+        .post(jsonku.edit_header_kik_catspray);
+    app.route('/urut_nobukti_kik_catspray')
+        .post(jsonku.urut_nobukti_kik_catspray);
+
+    ///TRANSAKSI HEADER DETAIL KIK COMPOUND
+    app.route('/kik_compound_paginate')
+        .post(jsonku.kik_compound_paginate);
+    app.route('/count_kik_compound_paginate')
+        .post(jsonku.count_kik_compound_paginate);
+    app.route('/tambah_header_kik_compound')
+        .post(jsonku.tambah_header_kik_compound);
+    app.route('/hapus_kik_compound')
+        .post(jsonku.hapus_kik_compound);
+    app.route('/tambah_detail_kik_compound')
+        .post(jsonku.tambah_detail_kik_compound);
+    app.route('/edit_header_kik_compound')
+        .post(jsonku.edit_header_kik_compound);
+    app.route('/urut_nobukti_kik_compound')
+        .post(jsonku.urut_nobukti_kik_compound);
+
+    ///TRANSAKSI HEADER DETAIL KIK FLOCKING
+    app.route('/kik_flocking_paginate')
+        .post(jsonku.kik_flocking_paginate);
+    app.route('/count_kik_flocking_paginate')
+        .post(jsonku.count_kik_flocking_paginate);
+    app.route('/tambah_header_kik_flocking')
+        .post(jsonku.tambah_header_kik_flocking);
+    app.route('/hapus_kik_flocking')
+        .post(jsonku.hapus_kik_flocking);
+    app.route('/tambah_detail_kik_flocking')
+        .post(jsonku.tambah_detail_kik_flocking);
+    app.route('/edit_header_kik_flocking')
+        .post(jsonku.edit_header_kik_flocking);
+    app.route('/urut_nobukti_kik_flocking')
+        .post(jsonku.urut_nobukti_kik_flocking);
+
+    ///TRANSAKSI HEADER DETAIL KIK STRONG
+    app.route('/kik_strong_paginate')
+        .post(jsonku.kik_strong_paginate);
+    app.route('/count_kik_strong_paginate')
+        .post(jsonku.count_kik_strong_paginate);
+    app.route('/tambah_header_kik_strong')
+        .post(jsonku.tambah_header_kik_strong);
+    app.route('/hapus_kik_strong')
+        .post(jsonku.hapus_kik_strong);
+    app.route('/tambah_detail_kik_strong')
+        .post(jsonku.tambah_detail_kik_strong);
+    app.route('/edit_header_kik_strong')
+        .post(jsonku.edit_header_kik_strong);
+    app.route('/urut_nobukti_kik_strong')
+        .post(jsonku.urut_nobukti_kik_strong);
+
+    ///TRANSAKSI HEADER DETAIL KIK MICRO
+    app.route('/kik_micro_paginate')
+        .post(jsonku.kik_micro_paginate);
+    app.route('/count_kik_micro_paginate')
+        .post(jsonku.count_kik_micro_paginate);
+    app.route('/tambah_header_kik_micro')
+        .post(jsonku.tambah_header_kik_micro);
+    app.route('/hapus_kik_micro')
+        .post(jsonku.hapus_kik_micro);
+    app.route('/tambah_detail_kik_micro')
+        .post(jsonku.tambah_detail_kik_micro);
+    app.route('/edit_header_kik_micro')
+        .post(jsonku.edit_header_kik_micro);
+    app.route('/urut_nobukti_kik_micro')
+        .post(jsonku.urut_nobukti_kik_micro);
+
+    ///TRANSAKSI HEADER DETAIL KIK DR2
+    app.route('/kik_dr2_paginate')
+        .post(jsonku.kik_dr2_paginate);
+    app.route('/count_kik_dr2_paginate')
+        .post(jsonku.count_kik_dr2_paginate);
+    app.route('/tambah_header_kik_dr2')
+        .post(jsonku.tambah_header_kik_dr2);
+    app.route('/hapus_kik_dr2')
+        .post(jsonku.hapus_kik_dr2);
+    app.route('/tambah_detail_kik_dr2')
+        .post(jsonku.tambah_detail_kik_dr2);
+    app.route('/edit_header_kik_dr2')
+        .post(jsonku.edit_header_kik_dr2);
+    app.route('/urut_nobukti_kik_dr2')
+        .post(jsonku.urut_nobukti_kik_dr2);
+
+    ///TRANSAKSI HEADER DETAIL PREMI PSP
+    app.route('/premi_psp_paginate')
+        .post(jsonku.premi_psp_paginate);
+    app.route('/count_premi_psp_paginate')
+        .post(jsonku.count_premi_psp_paginate);
+    app.route('/tambah_header_premi_psp')
+        .post(jsonku.tambah_header_premi_psp);
+    app.route('/hapus_premi_psp')
+        .post(jsonku.hapus_premi_psp);
+    app.route('/tambah_detail_premi_psp')
+        .post(jsonku.tambah_detail_premi_psp);
+    app.route('/edit_header_premi_psp')
+        .post(jsonku.edit_header_premi_psp);
+    app.route('/urut_nobukti_premi_psp')
+        .post(jsonku.urut_nobukti_premi_psp);
 
     ///TRANSAKSI HEADER DETAIL KAS
     app.route('/tambah_header_kas')

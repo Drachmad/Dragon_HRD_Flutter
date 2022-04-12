@@ -9,7 +9,7 @@ import 'package:dragon/view/base_widget/mode_export.dart';
 import 'package:dragon/view/base_widget/notif_hapus.dart';
 import 'package:dragon/view/base_widget/toast.dart';
 import 'package:dragon/view/transaksi/kasmasuk/add_kasmasuk_screen.dart';
-import 'package:dragon/view/transaksi/kasmasuk/widget/kasmasuk_card.dart';
+import 'package:dragon/view/transaksi/kasmasuk/kasmasuk_card.dart';
 import 'package:provider/provider.dart';
 
 import 'widget/filter_tanggal.dart';

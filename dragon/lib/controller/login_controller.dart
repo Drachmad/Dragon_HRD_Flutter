@@ -26,7 +26,6 @@ class LoginController with ChangeNotifier {
           BotToast.showLoading();
           List data_user = await model_login()
               .select_data_login(usernameLogin.text, passwordLogin.text);
-          print(data_user);
           if (data_user.length > 0) {
             var obj_data = data_user[0];
             nama_staff = obj_data['USERNAME'].toString();

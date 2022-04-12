@@ -9,7 +9,7 @@ import 'package:dragon/view/base_widget/mode_export.dart';
 import 'package:dragon/view/base_widget/notif_hapus.dart';
 import 'package:dragon/view/base_widget/toast.dart';
 import 'package:dragon/view/transaksi/harian/add_harian_screen.dart';
-import 'package:dragon/view/transaksi/harian/widget/harian_card.dart';
+import 'package:dragon/view/transaksi/harian/harian_card.dart';
 import 'package:provider/provider.dart';
 
 class HarianScreen extends StatefulWidget {
@@ -66,47 +66,47 @@ class _HarianScreenState extends State<HarianScreen> {
             ),
           ),
           actions: [
-            if (Provider.of<LoginController>(context, listen: false).ROLE == 1)
-              OnHoverButton(
-                child: InkWell(
-                  hoverColor: Colors.transparent,
-                  onTap: () {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => AddHarianScreen(false)))
-                        .then((value) {
-                      if (value != null) {
-                        if (value) {
-                          harianController.selectDataPaginate(true, '');
-                        }
+            // if (Provider.of<LoginController>(context, listen: false).ROLE == 1)
+            OnHoverButton(
+              child: InkWell(
+                hoverColor: Colors.transparent,
+                onTap: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => AddHarianScreen(false)))
+                      .then((value) {
+                    if (value != null) {
+                      if (value) {
+                        harianController.selectDataPaginate(true, '');
                       }
-                    });
-                  },
-                  child: Container(
-                    height: 30,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          "assets/images/ic_add.png",
-                          height: 30,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          "Tambah Baru",
-                          style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black),
-                        ),
-                      ],
-                    ),
+                    }
+                  });
+                },
+                child: Container(
+                  height: 30,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        "assets/images/ic_add.png",
+                        height: 30,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "Tambah Baru",
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black),
+                      ),
+                    ],
                   ),
                 ),
               ),
+            ),
             SizedBox(
               width: 16,
             ),
@@ -155,16 +155,16 @@ class _HarianScreenState extends State<HarianScreen> {
             OnHoverButton(
               child: InkWell(
                 hoverColor: Colors.white,
-                onTap: () {
-                  if (harianController.index_terpilih != null) {
-                    // harianController.proses_print();
-                  } else {
-                    Toast(
-                        "Peringatan",
-                        "Silahkan pilih satu transaksi untuk di cetak !",
-                        false);
-                  }
-                },
+                // onTap: () {
+                //   if (harianController.index_terpilih != null) {
+                //     // harianController.proses_print();
+                //   } else {
+                //     Toast(
+                //         "Peringatan",
+                //         "Silahkan pilih satu transaksi untuk di cetak !",
+                //         false);
+                //   }
+                // },
                 child: Container(
                   height: 30,
                   child: Row(

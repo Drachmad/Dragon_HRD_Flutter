@@ -7,9 +7,9 @@ import 'package:dragon/config/color.dart';
 import 'package:dragon/config/config.dart';
 import 'package:dragon/controller/transaksi/kasmasuk_controller.dart';
 import 'package:dragon/model/data_account.dart';
-import 'package:dragon/view/transaksi/kasmasuk/pilih_account.dart';
+import 'package:dragon/view/transaksi/kasmasuk/widget/pilih_account.dart';
 import 'package:dragon/view/base_widget/save_success.dart';
-import 'package:dragon/view/transaksi/kasmasuk/widget/add_kasmasuk_card.dart';
+import 'package:dragon/view/transaksi/kasmasuk/add_kasmasuk_card.dart';
 import 'package:provider/provider.dart';
 
 class AddKasMasukScreen extends StatefulWidget {

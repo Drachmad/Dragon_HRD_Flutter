@@ -25,143 +25,146 @@ class PieChartWidgetState extends State {
     var homeController = Provider.of<HomeController>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.only(left: 32, right: 32, bottom: 16),
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Card(
-          elevation: 4,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Statistics",
-                      style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                    ),
-                    Image.asset(
-                      "assets/images/ic_more2.png",
-                      height: 20,
-                    ),
-                  ],
+      child: Container(
+        height: 400,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Card(
+            elevation: 4,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                const SizedBox(
+                  height: 16,
                 ),
-              ),
-              (homeController.trx_count > 0)
-                  ? Expanded(
-                      child: PieChart(
-                        PieChartData(
-                            pieTouchData: PieTouchData(touchCallback:
-                                (FlTouchEvent event, pieTouchResponse) {
-                              setState(() {
-                                if (!event.isInterestedForInteractions ||
-                                    pieTouchResponse == null ||
-                                    pieTouchResponse.touchedSection == null) {
-                                  touchedIndex = -1;
-                                  return;
-                                }
-                                touchedIndex = pieTouchResponse
-                                    .touchedSection.touchedSectionIndex;
-                              });
-                            }),
-                            startDegreeOffset: 270,
-                            borderData: FlBorderData(
-                              show: false,
-                            ),
-                            sectionsSpace: 1,
-                            centerSpaceRadius: 50,
-                            sections: showingSections()),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Statistics",
+                        style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
                       ),
-                    )
-                  : Expanded(
-                      child: Container(
-                        child: Center(
-                          child: Text(
-                            "Tidak ada data",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: GreyColor),
+                      Image.asset(
+                        "assets/images/ic_more2.png",
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                ),
+                (homeController.trx_count > 0)
+                    ? Expanded(
+                        child: PieChart(
+                          PieChartData(
+                              pieTouchData: PieTouchData(touchCallback:
+                                  (FlTouchEvent event, pieTouchResponse) {
+                                setState(() {
+                                  if (!event.isInterestedForInteractions ||
+                                      pieTouchResponse == null ||
+                                      pieTouchResponse.touchedSection == null) {
+                                    touchedIndex = -1;
+                                    return;
+                                  }
+                                  touchedIndex = pieTouchResponse
+                                      .touchedSection.touchedSectionIndex;
+                                });
+                              }),
+                              startDegreeOffset: 270,
+                              borderData: FlBorderData(
+                                show: false,
+                              ),
+                              sectionsSpace: 1,
+                              centerSpaceRadius: 10,
+                              sections: showingSections()),
+                        ),
+                      )
+                    : Expanded(
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              "Tidak ada data",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: GreyColor),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: Indicator(
-                        color: colorPO,
-                        text: 'Order Pembelian',
-                        isSquare: false,
-                        size: touchedIndex == 0 ? 10 : 14,
-                        textColor:
-                            touchedIndex == 0 ? Colors.black : Colors.grey,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child: Indicator(
+                          color: colorPO,
+                          text: 'Order Pembelian',
+                          isSquare: false,
+                          size: touchedIndex == 0 ? 10 : 14,
+                          textColor:
+                              touchedIndex == 0 ? Colors.black : Colors.grey,
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Indicator(
-                        color: colorSO,
-                        text: 'Order Penjualan',
-                        isSquare: false,
-                        size: touchedIndex == 2 ? 10 : 14,
-                        textColor:
-                            touchedIndex == 2 ? Colors.black : Colors.grey,
+                      Expanded(
+                        flex: 3,
+                        child: Indicator(
+                          color: colorSO,
+                          text: 'Order Penjualan',
+                          isSquare: false,
+                          size: touchedIndex == 2 ? 10 : 14,
+                          textColor:
+                              touchedIndex == 2 ? Colors.black : Colors.grey,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 4,
-                      child: Indicator(
-                        color: colorBUY,
-                        text: 'Pembelian',
-                        isSquare: false,
-                        size: touchedIndex == 1 ? 10 : 14,
-                        textColor:
-                            touchedIndex == 1 ? Colors.black : Colors.grey,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Indicator(
-                        color: colorSALE,
-                        text: 'Penjualan',
-                        isSquare: false,
-                        size: touchedIndex == 3 ? 10 : 14,
-                        textColor:
-                            touchedIndex == 3 ? Colors.black : Colors.grey,
-                      ),
-                    ),
-                  ],
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 4,
+                        child: Indicator(
+                          color: colorBUY,
+                          text: 'Pembelian',
+                          isSquare: false,
+                          size: touchedIndex == 1 ? 10 : 14,
+                          textColor:
+                              touchedIndex == 1 ? Colors.black : Colors.grey,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Indicator(
+                          color: colorSALE,
+                          text: 'Penjualan',
+                          isSquare: false,
+                          size: touchedIndex == 3 ? 10 : 14,
+                          textColor:
+                              touchedIndex == 3 ? Colors.black : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+              ],
+            ),
           ),
         ),
       ),

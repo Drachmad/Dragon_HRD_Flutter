@@ -16,7 +16,7 @@ class HRD_BagianController with ChangeNotifier {
   List<DropdownMenuItem<int>> dropdownLimit;
   int totalNotaTerima = 0;
   int offset = 0;
-  int limit = 50;
+  int limit = 0;
   double pageCount = 1;
   int page_index = 0;
 
@@ -88,7 +88,7 @@ class HRD_BagianController with ChangeNotifier {
   TextEditingController kd_grupController = TextEditingController();
   TextEditingController nm_grupController = TextEditingController();
   TextEditingController acnoController = TextEditingController();
-  TextEditingController drController = TextEditingController();
+  String dr;
 
   void resetField() {
     kd_bagController.clear();
@@ -99,7 +99,6 @@ class HRD_BagianController with ChangeNotifier {
     kd_grupController.clear();
     nm_grupController.clear();
     acnoController.clear();
-    drController.clear();
   }
 
   Future<bool> tambah_hrdbagian() async {
@@ -115,7 +114,7 @@ class HRD_BagianController with ChangeNotifier {
       data_insert['kd_grup'] = kd_grupController.text;
       data_insert['nm_grup'] = nm_grupController.text;
       data_insert['acno'] = acnoController.text;
-      data_insert['dr'] = drController.text;
+      data_insert['dr'] = dr;
       await model_hrd_bagian().insert_data_hrdbagian(data_insert);
       Toast("Success !!", "Berhasil menambah HRD bagian !", true);
       BotToast.closeAllLoading();
@@ -139,7 +138,7 @@ class HRD_BagianController with ChangeNotifier {
       data_insert['kd_grup'] = kd_grupController.text;
       data_insert['nm_grup'] = nm_grupController.text;
       data_insert['acno'] = acnoController.text;
-      data_insert['dr'] = drController.text;
+      data_insert['dr'] = dr;
       // print(data_insert);
       await model_hrd_bagian().update_data_hrdbagian_by_id(data_insert);
       Toast("Success !!", "Berhasil update HRD bagian !", true);

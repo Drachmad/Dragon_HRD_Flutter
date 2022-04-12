@@ -127,9 +127,9 @@ class _AbsenHarianScreenState extends State<AbsenHarianScreen> {
             // ),
             OnHoverButton(
               child: InkWell(
-                hoverColor: Colors.white,
+                hoverColor: Colors.transparent,
                 onTap: () {
-                  lap_absen.proses_export_absen_harian(1);
+                  lap_absen.print();
                 },
                 child: Container(
                   height: 30,
@@ -144,7 +144,7 @@ class _AbsenHarianScreenState extends State<AbsenHarianScreen> {
                         width: 8,
                       ),
                       Text(
-                        "Cetak",
+                        "Print",
                         style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
@@ -267,7 +267,7 @@ class _AbsenHarianScreenState extends State<AbsenHarianScreen> {
                             initialFirstRowIndex: 0,
                             columnSpacing: 0,
                             horizontalMargin: 10,
-                            rowsPerPage: 8,
+                            rowsPerPage: 10,
                             showCheckboxColumn: true,
                           ),
                         ),
@@ -296,13 +296,14 @@ class MyData extends DataTableSource {
   var dtx = [];
   BuildContext context;
   AbsenHarianController lap_absen;
+  // var sumData = 0;
   MyData(this.dtx, this.context, this.lap_absen);
   bool get isRowCountApproximate => false;
   int get rowCount => dtx.length;
   int get selectedRowCount => 0;
   DataRow getRow(int index) {
-    // print(dtx[index]['TGL']);
-    // print(dtx[index]['NO_PO']);
+    // sumData += dtx[index]['BAGIAN'];
+    // print(sumData);
     return DataRow(cells: [
       DataCell(
         Text(''),

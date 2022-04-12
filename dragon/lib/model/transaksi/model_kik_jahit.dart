@@ -1,12 +1,8 @@
-import 'package:dragon/mysql/koneksi_mysql.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:dragon/constants.dart';
 
 class model_kik_jahit {
-  static String table = 'hrd_absen';
-  static String table_detail = 'hrd_absend';
-  koneksi_mysql m_koneksi = koneksi_mysql();
   String baseUrl = base_url;
 
   ///paginate
@@ -34,16 +30,6 @@ class model_kik_jahit {
     return results2['data'].toList();
   }
 
-  // ///SELECT HEADER
-  // Future<List> select_kik_jahit(String cari) async {
-  //   final response = await http.post(
-  //     Uri.parse("${baseUrl}:3000/tampil_kik_jahit"),
-  //     body: {"cari": cari},
-  //   );
-  //   var results2 = json.decode(response.body);
-  //   return results2['data'].toList();
-  // }
-
   Future<List> insert_kik_jahit(Map data_insert) async {
     try {
       ///DATA HEADER
@@ -52,9 +38,22 @@ class model_kik_jahit {
         Uri.parse("${baseUrl}:3000/tambah_header_kik_jahit"),
         body: {
           "no_bukti": data_insert['no_bukti'].toString(),
+          "per": data_insert['per'].toString(),
+          "dr": data_insert['dr'].toString(),
           "kd_bag": data_insert['kd_bag'].toString(),
           "nm_bag": data_insert['nm_bag'].toString(),
+          "flag": data_insert['flag'].toString(),
+          "kik_grup": data_insert['kik_grup'].toString(),
+          "tqty": data_insert['tqty'].toString(),
+          "tjumlah": data_insert['tjumlah'].toString(),
+          "t_hr": data_insert['t_hr'].toString(),
           "notes": data_insert['notes'].toString(),
+          "periode": data_insert['periode'].toString(),
+          "ppn": data_insert['ppn'].toString(),
+          "minuss": data_insert['minuss'].toString(),
+          "lunas_bs": data_insert['lunas_bs'].toString(),
+          "upah_tambah": data_insert['upah_tambah'].toString(),
+          "pot_bon": data_insert['pot_bon'].toString(),
         },
       );
 
@@ -67,18 +66,18 @@ class model_kik_jahit {
           Uri.parse("${baseUrl}:3000/tambah_detail_kik_jahit"),
           body: {
             "no_bukti": data_insert['no_bukti'].toString(),
-            "kd_bag": data_detail[i]['kd_bag'].toString(),
-            "kd_peg": data_detail[i]['kd_peg'].toString(),
-            "nm_peg": data_detail[i]['nm_peg'].toString(),
-            "ptkp": data_detail[i]['ptkp'].toString(),
-            "hr": data_detail[i]['hr'].toString(),
-            "jam1": data_detail[i]['jam1'].toString(),
-            "jam2": data_detail[i]['jam2'].toString(),
-            "jam1rp": data_detail[i]['jam1rp'].toString(),
-            "jam2rp": data_detail[i]['jam2rp'].toString(),
-            "lain": data_detail[i]['lain'].toString(),
-            "insentifbulanan": data_detail[i]['insentifbulanan'].toString(),
+            "no_kik": data_detail[i]['no_kik'].toString(),
+            "tgl_kik": data_detail[i]['tgl_kik'].toString(),
+            "model": data_detail[i]['model'].toString(),
+            "item": data_detail[i]['item'].toString(),
+            "des1": data_detail[i]['des1'].toString(),
+            "qty": data_detail[i]['qty'].toString(),
+            "upah": data_detail[i]['upah'].toString(),
             "jumlah": data_detail[i]['jumlah'].toString(),
+            "org": data_detail[i]['org'].toString(),
+            "hr": data_detail[i]['hr'].toString(),
+            "dr": data_detail[i]['dr'].toString(),
+            "per": data_detail[i]['per'].toString(),
           },
         );
       }
@@ -94,7 +93,7 @@ class model_kik_jahit {
         body: {
           "no_bukti": data_insert['no_bukti'].toString(),
           "kolom": "no_bukti",
-          "tabel": "hrd_absend"
+          "tabel": "hrd_kikd"
         },
       );
 
@@ -106,7 +105,14 @@ class model_kik_jahit {
           "no_bukti": data_insert['no_bukti'].toString(),
           "kd_bag": data_insert['kd_bag'].toString(),
           "nm_bag": data_insert['nm_bag'].toString(),
+          "kik_grup": data_insert['kik_grup'].toString(),
           "notes": data_insert['notes'].toString(),
+          "periode": data_insert['periode'].toString(),
+          "ppn": data_insert['ppn'].toString(),
+          "minuss": data_insert['minuss'].toString(),
+          "lunas_bs": data_insert['lunas_bs'].toString(),
+          "upah_tambah": data_insert['upah_tambah'].toString(),
+          "pot_bon": data_insert['pot_bon'].toString(),
         },
       );
 
@@ -119,24 +125,33 @@ class model_kik_jahit {
           Uri.parse("${baseUrl}:3000/tambah_detail_kik_jahit"),
           body: {
             "no_bukti": data_insert['no_bukti'].toString(),
-            "kd_bag": data_detail[i]['kd_bag'].toString(),
-            "kd_peg": data_detail[i]['kd_peg'].toString(),
-            "nm_peg": data_detail[i]['nm_peg'].toString(),
-            "ptkp": data_detail[i]['ptkp'].toString(),
-            "hr": data_detail[i]['hr'].toString(),
-            "jam1": data_detail[i]['jam1'].toString(),
-            "jam2": data_detail[i]['jam2'].toString(),
-            "jam1rp": data_detail[i]['jam1rp'].toString(),
-            "jam2rp": data_detail[i]['jam2rp'].toString(),
-            "lain": data_detail[i]['lain'].toString(),
-            "insentifbulanan": data_detail[i]['insentifbulanan'].toString(),
+            "no_kik": data_detail[i]['no_kik'].toString(),
+            "tgl_kik": data_detail[i]['tgl_kik'].toString(),
+            "model": data_detail[i]['model'].toString(),
+            "item": data_detail[i]['item'].toString(),
+            "des1": data_detail[i]['des1'].toString(),
+            "qty": data_detail[i]['qty'].toString(),
+            "upah": data_detail[i]['upah'].toString(),
             "jumlah": data_detail[i]['jumlah'].toString(),
+            "org": data_detail[i]['org'].toString(),
+            "hr": data_detail[i]['hr'].toString(),
+            "dr": data_detail[i]['dr'].toString(),
+            "per": data_detail[i]['per'].toString(),
           },
         );
       }
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future<List> urut_nobukti(String per) async {
+    final response = await http.post(
+      Uri.parse("${baseUrl}:3000/urut_nobukti_kik_jahit"),
+      body: {"per": per},
+    );
+    var results2 = json.decode(response.body);
+    return results2['data'].toList();
   }
 
   Future<List> get_no_bukti(
@@ -160,13 +175,29 @@ class model_kik_jahit {
     return results2['data'].toList();
   }
 
-  Future<List> delete_kik_jahit(String no_bukti) async {
-    var konek = await m_koneksi.koneksi();
-    var results1 =
-        await konek.query("delete from $table where no_bukti = '$no_bukti';");
-    var results2 = await konek
-        .query("delete from $table_detail where no_bukti = '$no_bukti';");
-    await konek.close();
-    return results2.toList();
+  Future delete_kik_jahit(String no_bukti) async {
+    try {
+      await http.post(
+        Uri.parse("${baseUrl}:3000/hapus_kik_jahit"),
+        body: {"tabel": "hrd_kik", "no_bukti": no_bukti},
+      );
+      await http.post(
+        Uri.parse("${baseUrl}:3000/hapus_kik_jahit"),
+        body: {"tabel": "hrd_kikd", "no_bukti": no_bukti},
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future report_tes() async {
+    try {
+      await http.post(
+        Uri.parse("${baseUrl}:3000/report_tes"),
+        body: {},
+      );
+    } catch (e) {
+      return false;
+    }
   }
 }

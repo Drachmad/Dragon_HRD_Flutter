@@ -160,6 +160,9 @@ class _PilihBagianState extends State<PilihBagian> {
                             .text =
                         bagianController.data_bagianList[index_terpilih]
                             ['nm_bag'];
+                    Provider.of<HarianController>(context, listen: false)
+                        .get_data_bagian(bagianController
+                            .data_bagianList[index_terpilih]['kd_bag']);
                     Navigator.pop(context);
                   } else {
                     Toast("Peringatan", "Belum ada data terpilih", false);

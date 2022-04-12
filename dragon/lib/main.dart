@@ -31,6 +31,21 @@ import 'package:dragon/controller/transaksi/memo_controller.dart';
 import 'package:dragon/controller/transaksi/harian_controller.dart';
 import 'package:dragon/controller/transaksi/borongan_controller.dart';
 import 'package:dragon/controller/transaksi/kik_jahit_controller.dart';
+import 'package:dragon/controller/transaksi/kik_juki_controller.dart';
+import 'package:dragon/controller/transaksi/kik_ksp_controller.dart';
+import 'package:dragon/controller/transaksi/kik_packing_controller.dart';
+import 'package:dragon/controller/transaksi/kik_plong_controller.dart';
+import 'package:dragon/controller/transaksi/kik_sablon_controller.dart';
+import 'package:dragon/controller/transaksi/kik_injection_controller.dart';
+import 'package:dragon/controller/transaksi/kik_assembling_controller.dart';
+import 'package:dragon/controller/transaksi/kik_catspray_controller.dart';
+import 'package:dragon/controller/transaksi/kik_compound_controller.dart';
+import 'package:dragon/controller/transaksi/kik_flocking_controller.dart';
+import 'package:dragon/controller/transaksi/kik_strong_controller.dart';
+import 'package:dragon/controller/transaksi/kik_micro_controller.dart';
+import 'package:dragon/controller/transaksi/kik_dr2_controller.dart';
+import 'package:dragon/controller/transaksi/premi_psp_controller.dart';
+import 'package:dragon/controller/laporan/gaji_harian_controller.dart';
 import 'package:dragon/controller/home_controller.dart';
 import 'package:dragon/controller/login_controller.dart';
 import 'package:dragon/view/login/login_screen.dart';
@@ -53,7 +68,7 @@ Future<void> init() async {
   sl.registerFactory(() => HRD_BagianController());
   sl.registerFactory(() => HRD_BoronganController());
   sl.registerFactory(() => HRD_GrupController());
-  sl.registerFactory(() => HRD_ModelController());
+  sl.registerFactory(() => HRDmodelController());
   sl.registerFactory(() => Pembelian_SupplierController());
   sl.registerFactory(() => Pembelian_BahanController());
   sl.registerFactory(() => Pembelian_NonbahanController());
@@ -72,6 +87,21 @@ Future<void> init() async {
   sl.registerFactory(() => HarianController());
   sl.registerFactory(() => BoronganController());
   sl.registerFactory(() => KikJahitController());
+  sl.registerFactory(() => KikJukiController());
+  sl.registerFactory(() => KikKspController());
+  sl.registerFactory(() => KikPackingController());
+  sl.registerFactory(() => KikPlongController());
+  sl.registerFactory(() => KikSablonController());
+  sl.registerFactory(() => KikInjectionController());
+  sl.registerFactory(() => KikAssemblingController());
+  sl.registerFactory(() => KikCatSprayController());
+  sl.registerFactory(() => KikCompoundController());
+  sl.registerFactory(() => KikFlockingController());
+  sl.registerFactory(() => KikStrongController());
+  sl.registerFactory(() => KikMicroController());
+  sl.registerFactory(() => KikDR2Controller());
+  sl.registerFactory(() => PremiPSPController());
+  sl.registerFactory(() => GajiHarianController());
   sl.registerFactory(() => LoginController());
 }
 
@@ -100,8 +130,7 @@ Future<void> main() async {
           ChangeNotifierProvider(
               create: (context) => sl<HRD_BoronganController>()),
           ChangeNotifierProvider(create: (context) => sl<HRD_GrupController>()),
-          ChangeNotifierProvider(
-              create: (context) => sl<HRD_ModelController>()),
+          ChangeNotifierProvider(create: (context) => sl<HRDmodelController>()),
           ChangeNotifierProvider(
               create: (context) => sl<Pembelian_SupplierController>()),
           ChangeNotifierProvider(
@@ -133,6 +162,30 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => sl<HarianController>()),
           ChangeNotifierProvider(create: (context) => sl<BoronganController>()),
           ChangeNotifierProvider(create: (context) => sl<KikJahitController>()),
+          ChangeNotifierProvider(create: (context) => sl<KikJukiController>()),
+          ChangeNotifierProvider(create: (context) => sl<KikKspController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<KikPackingController>()),
+          ChangeNotifierProvider(create: (context) => sl<KikPlongController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<KikSablonController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<KikInjectionController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<KikAssemblingController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<KikCatSprayController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<KikCompoundController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<KikFlockingController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<KikStrongController>()),
+          ChangeNotifierProvider(create: (context) => sl<KikMicroController>()),
+          ChangeNotifierProvider(create: (context) => sl<KikDR2Controller>()),
+          ChangeNotifierProvider(create: (context) => sl<PremiPSPController>()),
+          ChangeNotifierProvider(
+              create: (context) => sl<GajiHarianController>()),
           ChangeNotifierProvider(create: (context) => sl<LoginController>()),
         ],
         child: MyApp(),

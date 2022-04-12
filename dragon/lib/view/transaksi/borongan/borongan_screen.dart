@@ -9,7 +9,7 @@ import 'package:dragon/view/base_widget/mode_export.dart';
 import 'package:dragon/view/base_widget/notif_hapus.dart';
 import 'package:dragon/view/base_widget/toast.dart';
 import 'package:dragon/view/transaksi/borongan/add_borongan_screen.dart';
-import 'package:dragon/view/transaksi/borongan/widget/borongan_card.dart';
+import 'package:dragon/view/transaksi/borongan/borongan_card.dart';
 import 'package:provider/provider.dart';
 
 class BoronganScreen extends StatefulWidget {

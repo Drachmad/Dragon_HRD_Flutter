@@ -18,6 +18,19 @@ class TambahHRDbagianScreen extends StatefulWidget {
 }
 
 class _TambahHRDbagianScreenState extends State<TambahHRDbagianScreen> {
+  // Default Drop Down Item.
+  String dragonValue = 'Dragon 1';
+
+  List<String> dragon = [
+    'Dragon 1',
+    'Dragon 2',
+    'Dragon 3',
+    'Dragon 4',
+    'AB',
+    'PY',
+    'N1'
+  ];
+
   @override
   void initState() {
     var m_hrdbagian = Provider.of<HRD_BagianController>(context, listen: false);
@@ -34,8 +47,7 @@ class _TambahHRDbagianScreenState extends State<TambahHRDbagianScreen> {
       m_hrdbagian.nm_grupController.text =
           widget.data_hrdbagian['nm_grup'] ?? "";
       m_hrdbagian.acnoController.text = widget.data_hrdbagian['acno'] ?? "";
-      m_hrdbagian.drController.text =
-          widget.data_hrdbagian['dr'].toString() ?? "";
+      dragonValue = widget.data_hrdbagian['dr'] ?? "";
     } else {
       m_hrdbagian.resetField();
     }
@@ -505,24 +517,40 @@ class _TambahHRDbagianScreenState extends State<TambahHRDbagianScreen> {
                                     ),
                                     Container(
                                       height: 40,
+                                      width: double.infinity,
                                       decoration: BoxDecoration(
                                         border: Border.all(color: GreyColor),
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                      child: TextFormField(
-                                        controller:
-                                            hrdbagianController.drController,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.only(
-                                              top: 18, bottom: 18),
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          focusedErrorBorder: InputBorder.none,
-                                          errorBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: DropdownButtonHideUnderline(
+                                        child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton<String>(
+                                            value: dragonValue,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                            onChanged: (String data) {
+                                              setState(() {
+                                                dragonValue = data;
+                                              });
+                                              hrdbagianController.dr =
+                                                  dragonValue;
+                                            },
+                                            items: dragon
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
                                         ),
                                       ),
                                     ),

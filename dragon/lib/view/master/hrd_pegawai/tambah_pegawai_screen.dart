@@ -33,7 +33,8 @@ class _TambahPegawaiScreenState extends State<TambahPegawaiScreen>
       m_pegawai.nm_bagController.text = widget.data_pegawai['nm_bag'] ?? "";
       m_pegawai.aktifController.text =
           widget.data_pegawai['aktif'].toString() ?? "";
-      m_pegawai.jkController.text = widget.data_pegawai['jk'].toString() ?? "";
+      jkValue =
+          (widget.data_pegawai['jk'] == "L") ? "Laki - Laki" : "Perempuan";
       m_pegawai.kpjController.text =
           widget.data_pegawai['kpj'].toString() ?? "";
       m_pegawai.bpjsController.text =

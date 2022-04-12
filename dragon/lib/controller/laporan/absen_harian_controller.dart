@@ -11,8 +11,10 @@ class AbsenHarianController with ChangeNotifier {
   bool isEnable_button = true;
   String PER = DateTime.now().toString().substring(0, 7);
   int index_terpilih;
+  String paramKD_BAG = '';
 
   Future<void> select_data(String KD_BAG) async {
+    paramKD_BAG = KD_BAG;
     data_list = await m_data.lap_absen_harian(KD_BAG, PER);
     notifyListeners();
   }
@@ -20,6 +22,11 @@ class AbsenHarianController with ChangeNotifier {
   void initData() {
     index_terpilih = null;
     select_data('');
+  }
+
+  Future<void> print() async {
+    await m_data.print_data(paramKD_BAG, PER);
+    notifyListeners();
   }
 
   Future<void> proses_export_absen_harian(int mode) async {

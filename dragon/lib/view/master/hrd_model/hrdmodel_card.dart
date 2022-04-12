@@ -5,14 +5,13 @@ import 'package:dragon/config/color.dart';
 import 'package:dragon/controller/master/hrd_model_controller.dart';
 import 'package:provider/provider.dart';
 
-Widget HRDmodelCard(
-    BuildContext context, int index, HRD_ModelController val_bar,
+Widget HRDmodelCard(BuildContext context, int index, HRDmodelController val_bar,
     {Function pressEdit, Function pressDelete}) {
-  int offset = Provider.of<HRD_ModelController>(context, listen: false).offset;
+  int offset = Provider.of<HRDmodelController>(context, listen: false).offset;
 
-  String model = val_bar.data_hrdModelList[index]['model'] ?? "-";
-  String notes = val_bar.data_hrdModelList[index]['notes'] ?? "-";
-  String dr = val_bar.data_hrdModelList[index]['dr'] ?? "-";
+  String model = val_bar.data_hrd_model_list[index]['model'] ?? "-";
+  String notes = val_bar.data_hrd_model_list[index]['notes'] ?? "-";
+  String dr = val_bar.data_hrd_model_list[index]['dr'] ?? "-";
 
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),

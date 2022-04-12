@@ -1,5 +1,4 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:dragon/model/master/model_hrd_pegawai.dart';
@@ -88,7 +87,7 @@ class HRD_PegawaiController with ChangeNotifier {
   TextEditingController kd_bagController = TextEditingController();
   TextEditingController nm_bagController = TextEditingController();
   TextEditingController aktifController = TextEditingController();
-  TextEditingController jkController = TextEditingController();
+  String jk;
   TextEditingController kpjController = TextEditingController();
   TextEditingController bpjsController = TextEditingController();
   TextEditingController alamatController = TextEditingController();
@@ -117,7 +116,6 @@ class HRD_PegawaiController with ChangeNotifier {
     kd_bagController.clear();
     nm_bagController.clear();
     aktifController.clear();
-    jkController.clear();
     kpjController.clear();
     bpjsController.clear();
     alamatController.clear();
@@ -149,7 +147,7 @@ class HRD_PegawaiController with ChangeNotifier {
       data_insert['kd_bag'] = kd_bagController.text;
       data_insert['nm_bag'] = nm_bagController.text;
       data_insert['aktif'] = aktifController.text;
-      data_insert['jk'] = jkController.text;
+      data_insert['jk'] = jk;
       data_insert['kpj'] = kpjController.text;
       data_insert['bpjs'] = bpjsController.text;
       data_insert['alamat'] = alamatController.text;
@@ -189,7 +187,7 @@ class HRD_PegawaiController with ChangeNotifier {
       data_insert['kd_bag'] = kd_bagController.text;
       data_insert['nm_bag'] = nm_bagController.text;
       data_insert['aktif'] = aktifController.text;
-      data_insert['jk'] = jkController.text;
+      data_insert['jk'] = jk;
       data_insert['kpj'] = kpjController.text;
       data_insert['bpjs'] = bpjsController.text;
       data_insert['alamat'] = alamatController.text;

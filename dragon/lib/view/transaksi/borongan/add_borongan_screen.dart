@@ -1,4 +1,5 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:dragon/controller/login_controller.dart';
 import 'package:dragon/view/transaksi/borongan/widget/pilih_bagian.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +10,8 @@ import 'package:dragon/config/config.dart';
 import 'package:dragon/controller/transaksi/borongan_controller.dart';
 import 'package:dragon/model/data_pegawai.dart';
 import 'package:dragon/view/base_widget/save_success.dart';
-import 'package:dragon/view/transaksi/borongan/widget/add_borongan_card.dart';
+import 'package:dragon/view/transaksi/borongan/add_borongan_card.dart';
+import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AddBoronganScreen extends StatefulWidget {
@@ -27,15 +29,20 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
 
   _AddBoronganScreenState();
 
+  bool isChecked = false;
+
   @override
   void initState() {
     if (widget.isModeEdit) {
       Provider.of<BoronganController>(context, listen: false)
           .initData_editBorongan(widget.data_edit);
+      isChecked = (widget.data_edit['premi'] == '1') ? true : false;
     } else {
       Provider.of<BoronganController>(context, listen: false)
           .initData_addBorongan();
     }
+    Provider.of<BoronganController>(context, listen: false).dr =
+        Provider.of<LoginController>(context, listen: false).dr;
     super.initState();
   }
 
@@ -454,6 +461,11 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                       child: TextFormField(
                                         controller:
                                             boronganController.lainController,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          ThousandsFormatter(
+                                              allowFraction: true)
+                                        ],
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
                                               top: 18, bottom: 18),
@@ -499,6 +511,11 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                       child: TextFormField(
                                         controller: boronganController
                                             .tot_bonController,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          ThousandsFormatter(
+                                              allowFraction: true)
+                                        ],
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
                                               top: 18, bottom: 18),
@@ -544,6 +561,11 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                       child: TextFormField(
                                         controller:
                                             boronganController.otherController,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          ThousandsFormatter(
+                                              allowFraction: true)
+                                        ],
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
                                               top: 18, bottom: 18),
@@ -598,6 +620,11 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                       child: TextFormField(
                                         controller: boronganController
                                             .kik_netController,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          ThousandsFormatter(
+                                              allowFraction: true)
+                                        ],
                                         readOnly: true,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
@@ -634,26 +661,64 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                       height: 8,
                                     ),
                                     Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: GreyColor),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                      child: TextFormField(
-                                        controller:
-                                            boronganController.tmsController,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.only(
-                                              top: 18, bottom: 18),
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          focusedErrorBorder: InputBorder.none,
-                                          errorBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                        ),
+                                      child: new Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Expanded(
+                                            flex: 4,
+                                            child: Container(
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: GreyColor),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 16),
+                                              child: TextFormField(
+                                                controller: boronganController
+                                                    .tmsController,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                inputFormatters: [
+                                                  ThousandsFormatter(
+                                                      allowFraction: true)
+                                                ],
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          top: 18, bottom: 18),
+                                                  border: InputBorder.none,
+                                                  focusedBorder:
+                                                      InputBorder.none,
+                                                  focusedErrorBorder:
+                                                      InputBorder.none,
+                                                  errorBorder: InputBorder.none,
+                                                  enabledBorder:
+                                                      InputBorder.none,
+                                                  disabledBorder:
+                                                      InputBorder.none,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 18),
+                                              child: SizedBox(
+                                                height: 40,
+                                                child: ElevatedButton(
+                                                  style: ButtonStyle(),
+                                                  onPressed: () {},
+                                                  child: Text('TMS'),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -669,7 +734,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Premi",
+                                      "",
                                       style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
@@ -678,28 +743,19 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                                     SizedBox(
                                       height: 8,
                                     ),
-                                    Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: GreyColor),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                      child: TextFormField(
-                                        controller:
-                                            boronganController.premiController,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.only(
-                                              top: 18, bottom: 18),
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          focusedErrorBorder: InputBorder.none,
-                                          errorBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                        ),
-                                      ),
+                                    CheckboxListTile(
+                                      title: Text("Premi"),
+                                      value: isChecked,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          isChecked = newValue;
+                                          boronganController.premi =
+                                              (isChecked == true) ? '1' : '0';
+                                          boronganController.notifyListeners();
+                                        });
+                                      },
+                                      controlAffinity: ListTileControlAffinity
+                                          .leading, //  <-- leading Checkbox
                                     ),
                                   ],
                                 ),
@@ -797,10 +853,11 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                       ),
                       itemSubmitted: (item) {
                         DataPegawai db_item = DataPegawai(
-                          noid: item.noid,
+                          no_id: item.no_id,
                           kd_peg: item.kd_peg,
                           nm_peg: item.nm_peg,
                           ptkp: item.ptkp,
+                          upah: item.upah,
                           // st: item.st,
                         );
                         searchTextField.textField.controller.clear();
@@ -1088,7 +1145,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                 width: 8,
               ),
               Expanded(
-                flex: 9,
+                flex: 12,
                 child: Text(
                   "TOTAL",
                   textAlign: TextAlign.center,
@@ -1101,7 +1158,41 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
               Expanded(
                 flex: 2,
                 child: Text(
+                  config().format_rupiah(boronganController.msTotal.toString()),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  config().format_rupiah(boronganController.ikTotal.toString()),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  config().format_rupiah(boronganController.nbTotal.toString()),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
                   config().format_rupiah(boronganController.hrTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1112,7 +1203,8 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                 flex: 2,
                 child: Text(
                   config()
-                      .format_rupiah(boronganController.jam1Total.toString()),
+                      .format_rupiah(boronganController.upahTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1123,7 +1215,8 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                 flex: 2,
                 child: Text(
                   config()
-                      .format_rupiah(boronganController.jam2Total.toString()),
+                      .format_rupiah(boronganController.bonTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1133,19 +1226,22 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  config()
-                      .format_rupiah(boronganController.jam1rpTotal.toString()),
+                  config().format_rupiah(
+                      boronganController.subsidiTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.black),
                 ),
               ),
+              Expanded(flex: 2, child: SizedBox()),
               Expanded(
                 flex: 2,
                 child: Text(
                   config()
-                      .format_rupiah(boronganController.jam2rpTotal.toString()),
+                      .format_rupiah(boronganController.harianTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1157,17 +1253,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                 child: Text(
                   config()
                       .format_rupiah(boronganController.lainTotal.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config().format_rupiah(
-                      boronganController.insentifbulananTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -1179,6 +1265,7 @@ class _AddBoronganScreenState extends State<AddBoronganScreen> {
                 child: Text(
                   config()
                       .format_rupiah(boronganController.jumlahTotal.toString()),
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

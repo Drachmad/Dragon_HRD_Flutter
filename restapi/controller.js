@@ -36,9 +36,39 @@ exports.tampil_account = function (req, res) {
         });
 }
 
-//menampilkan Data Account
+//menampilkan Data PEGAWAI
 exports.tampil_pegawai = function (req, res) {
     connection.query("select * from hrd_peg",
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+//menampilkan Data KIK
+exports.tampil_kik = function (req, res) {
+    var kik_grup = req.body.kik_grup;
+    connection.query("SELECT gd_kik.no_kik, hrd_modeld.model, gd_kik.qty, hrd_modeld.upah, hrd_modeld.urut_ke, hrd_modeld.kode, hrd_modeld.item, hrd_modeld.des1 FROM gd_kik, hrd_modeld WHERE gd_kik.model_bsg = hrd_modeld.model AND hrd_modeld.proses = ? AND hrd_modeld.dr = 'i' GROUP BY gd_kik.no_kik, hrd_modeld.upah", [kik_grup],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+//menampilkan Data Premi
+exports.tampil_premi = function (req, res) {
+    var kik_grup = req.body.kik_grup;
+    connection.query("SELECT gd_kik.no_kik, hrd_modeld.model, gd_kik.qty, hrd_modeld.upah, hrd_modeld.urut_ke, hrd_modeld.kode, hrd_modeld.item, hrd_modeld.des1 FROM gd_kik, hrd_modeld WHERE gd_kik.model_bsg = hrd_modeld.model AND hrd_modeld.proses = ? AND hrd_modeld.dr = 'i' GROUP BY gd_kik.no_kik, hrd_modeld.upah", [kik_grup],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -771,91 +801,6 @@ exports.hapus_hrd_grup = function (req, res) {
 };
 
 
-// ===========================================================================
-///paginate HRD Model
-exports.hrd_model_paginate = function (req, res) {
-    var filter_cari = '%' + req.body.cari + '%';
-    var offset_page = Number(req.body.offset);
-    var limit_page = Number(req.body.limit);
-    connection.query("select * from hrd_model where model like ? ORDER BY model LIMIT ?, ?", [filter_cari, offset_page, limit_page],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error);
-            } else {
-                response.ok(rows, res);
-
-            }
-        });
-}
-
-///paginate HRD model
-exports.count_hrd_model_paginate = function (req, res) {
-    var filter_cari = '%' + req.body.cari + '%';
-    connection.query("select COUNT(*) from hrd_model where model like ? ORDER BY model", [filter_cari],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error);
-            } else {
-                response.ok(rows, res);
-            }
-        });
-}
-
-//tambah Data HRD Model
-exports.tambah_hrd_model = function (req, res) {
-    var model = req.body.model;
-    var notes = req.body.notes;
-    var dr = req.body.dr;
-
-    connection.query("insert into hrd_model (model,notes,dr) values (?,?,?)", [model, notes, dr],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error);
-            } else {
-
-                response.ok('Berhasil Tambah Data', res);
-
-            }
-        });
-};
-
-
-//update Data HRD Model
-exports.ubah_hrd_model = function (req, res) {
-    var no_id = req.body.no_id;
-    var model = req.body.model;
-    var notes = req.body.notes;
-    var dr = req.body.dr;
-
-    connection.query("UPDATE hrd_model SET model=?,notes=?,dr=? where no_id = ? ", [model, notes, dr, no_id],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error);
-            } else {
-
-                response.ok('Berhasil Ubah Data', res);
-
-            }
-        });
-
-};
-
-//delete Data HRD Model
-exports.hapus_hrd_model = function (req, res) {
-    var no_id = req.body.no_id;
-    connection.query("DELETE FROM hrd_model WHERE no_id=? ", [no_id],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error);
-            } else {
-
-                response.ok('Berhasil Hapus Data', res);
-
-            }
-        });
-};
-
-
 // ============================================================================
 ///paginate Pembelian Supplier
 exports.pembelian_supplier_paginate = function (req, res) {
@@ -1394,6 +1339,31 @@ exports.lap_lembur_perjam = function (req, res) {
         });
 };
 
+///LAPORAN LEMBUR HARIAN
+exports.lap_gaji_harian = function (req, res) {
+    var filter_kd_bag = '';
+    var filter_tgl = '';
+    var KD_BAG = req.body.KD_BAG;
+    var TGL = req.body.TGL;
+    if (req.body.KD_BAG != '') {
+        filter_kd_bag = "AND hrd_lemd.kd_bag='" + KD_BAG + "'";
+    }
+    if (req.body.TGL != '') {
+        filter_tgl = "AND hrd_lemd.tgl='" + TGL + "'";
+    }
+
+    connection.query("SELECT hrd_lemd.nm_peg AS NM_PEG, hrd_lemd.no_bukti AS NO_BUKTI, CONCAT(hrd_lemd.kd_peg,' - ',hrd_lemd.nm_peg) AS PEGAWAI, CONCAT(hrd_lemd.kd_bag,' - ',hrd_lemd.nm_bag) AS BAGIAN, hrd_lemd.ulembur AS ULEMBUR, hrd_lemd.tgl AS TGL FROM hrd_lemd WHERE hrd_lemd.flag='HR' " + filter_kd_bag + " " + filter_tgl + " ORDER BY hrd_lemd.kd_peg",
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                // console.log(fields);
+                response.ok(rows, res);
+
+            }
+        });
+};
+
 ///TRANSAKSI HEADER DETAIL
 ///HEADER
 // ==================================================================
@@ -1468,8 +1438,7 @@ exports.tambah_detail_harian = function (req, res) {
     var lain = req.body.lain;
     var insentifbulanan = req.body.insentifbulanan;
     var jumlah = req.body.jumlah;
-    var per = req.body.per;
-    connection.query("insert into hrd_absend (no_bukti,flag,kd_bag,nm_bag,kd_peg,nm_peg,kd_grup,nm_grup,dr,ptkp,hr,jam1,jam2,jam1rp,jam2rp,lain,tperbulan,jumlah,per) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, flag, kd_bag, nm_bag, kd_peg, nm_peg, kd_grup, nm_grup, dr, ptkp, hr, jam1, jam2, jam1rp, jam2rp, lain, insentifbulanan, jumlah, per],
+    connection.query("insert into hrd_absend (no_bukti,flag,kd_bag,nm_bag,kd_peg,nm_peg,kd_grup,nm_grup,dr,ptkp,hr,jam1,jam2,jam1rp,jam2rp,lain,tperbulan,jumlah) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, flag, kd_bag, nm_bag, kd_peg, nm_peg, kd_grup, nm_grup, dr, ptkp, hr, jam1, jam2, jam1rp, jam2rp, lain, insentifbulanan, jumlah],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1545,9 +1514,19 @@ exports.tambah_header_borongan = function (req, res) {
     var no_bukti = req.body.no_bukti;
     var kd_bag = req.body.kd_bag;
     var nm_bag = req.body.nm_bag;
+    var kd_grup = req.body.kd_grup;
+    var flag = req.body.flag;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    var total_kik = req.body.total_kik;
+    var lain = req.body.lain;
+    var tot_bon = req.body.tot_bon;
+    var other = req.body.other;
+    var kik_net = req.body.kik_net;
+    var tms = req.body.tms;
+    var premi = req.body.premi;
     var notes = req.body.notes;
-    var flag = "HR";
-    connection.query("insert into hrd_absen (no_bukti, kd_bag, nm_bag, notes, flag) values (?,?,?,?,?)", [no_bukti, kd_bag, nm_bag, notes, flag],
+    connection.query("insert into hrd_absen (no_bukti, kd_bag, nm_bag, kd_grup,  flag, dr, per, tot_kik, tlain, tbon, other, kik_nett, tms, premi, notes) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, kd_bag, nm_bag, kd_grup, flag, dr, per, total_kik, lain, tot_bon, other, kik_net, tms, premi, notes],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1562,19 +1541,25 @@ exports.tambah_header_borongan = function (req, res) {
 ///DETAIL
 exports.tambah_detail_borongan = function (req, res) {
     var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    var nm_bag = req.body.nm_bag;
     var kd_bag = req.body.kd_bag;
     var kd_peg = req.body.kd_peg;
     var nm_peg = req.body.nm_peg;
     var ptkp = req.body.ptkp;
+    var st = req.body.st;
+    var ms = req.body.ms;
     var hr = req.body.hr;
-    var jam1 = req.body.jam1;
-    var jam2 = req.body.jam2;
-    var jam1rp = req.body.jam1rp;
-    var jam2rp = req.body.jam2rp;
-    var lain = req.body.lain;
-    var insentifbulanan = req.body.insentifbulanan;
+    var ik = req.body.ik;
+    var nb = req.body.nb;
+    var upah = req.body.upah;
+    var bon = req.body.bon;
+    var subsidi = req.body.subsidi;
+    var sub = req.body.sub;
     var jumlah = req.body.jumlah;
-    connection.query("insert into hrd_absend (no_bukti,kd_bag,kd_peg,nm_peg,ptkp,hr,jam1,jam2,jam1rp,jam2rp,lain,tperbulan,jumlah) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, kd_bag, kd_peg, nm_peg, ptkp, hr, jam1, jam2, jam1rp, jam2rp, lain, insentifbulanan, jumlah],
+    connection.query("insert into hrd_absend (no_bukti,flag,dr,per,nm_bag,kd_bag,kd_peg,nm_peg,ptkp,stat,ms,hr,ik,nb,nett,bon,subsidi,sub,jumlah) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, flag, dr, per, nm_bag, kd_bag, kd_peg, nm_peg, ptkp, st, ms, hr, ik, nb, upah, bon, subsidi, sub, jumlah],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1588,8 +1573,16 @@ exports.edit_header_borongan = function (req, res) {
     var no_bukti = req.body.no_bukti;
     var kd_bag = req.body.kd_bag;
     var nm_bag = req.body.nm_bag;
+    var kd_grup = req.body.kd_grup;
+    var total_kik = req.body.total_kik;
+    var lain = req.body.lain;
+    var tot_bon = req.body.tot_bon;
+    var other = req.body.other;
+    var kik_net = req.body.kik_net;
+    var tms = req.body.tms;
+    var premi = req.body.premi;
     var notes = req.body.notes;
-    connection.query("UPDATE hrd_absen set kd_bag=?,nm_bag=?,notes=? WHERE no_bukti=?", [kd_bag, nm_bag, notes, no_bukti],
+    connection.query("UPDATE hrd_absen set kd_bag=?,nm_bag=?,kd_grup=?,tot_kik=?,tlain=?,tbon=?,other=?,kik_nett=?,tms=?,premi=?,notes=? WHERE no_bukti=?", [kd_bag, nm_bag, kd_grup, total_kik, lain, tot_bon, other, kik_net, tms, premi, notes, no_bukti],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1622,7 +1615,7 @@ exports.kik_jahit_paginate = function (req, res) {
     var filter_cari = '%' + req.body.cari + '%';
     var offset_page = Number(req.body.offset);
     var limit_page = Number(req.body.limit);
-    connection.query("select * from hrd_kik where no_bukti like ? or kd_bag like ? LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'JAHIT' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1636,7 +1629,7 @@ exports.kik_jahit_paginate = function (req, res) {
 ///paginate Transaksi kik_jahit
 exports.count_kik_jahit_paginate = function (req, res) {
     var filter_cari = '%' + req.body.cari + '%';
-    connection.query("select COUNT(*) from hrd_kik where no_bukti like ? or kd_bag like ? ORDER BY no_bukti", [filter_cari, filter_cari],
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'JAHIT' ORDER BY no_bukti", [filter_cari, filter_cari],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1648,11 +1641,23 @@ exports.count_kik_jahit_paginate = function (req, res) {
 
 exports.tambah_header_kik_jahit = function (req, res) {
     var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
     var kd_bag = req.body.kd_bag;
     var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
     var notes = req.body.notes;
-    var flag = "HR";
-    connection.query("insert into hrd_kik (no_bukti, kd_bag, nm_bag, notes, flag) values (?,?,?,?,?)", [no_bukti, kd_bag, nm_bag, notes, flag],
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1667,19 +1672,19 @@ exports.tambah_header_kik_jahit = function (req, res) {
 ///DETAIL
 exports.tambah_detail_kik_jahit = function (req, res) {
     var no_bukti = req.body.no_bukti;
-    var kd_bag = req.body.kd_bag;
-    var kd_peg = req.body.kd_peg;
-    var nm_peg = req.body.nm_peg;
-    var ptkp = req.body.ptkp;
-    var hr = req.body.hr;
-    var jam1 = req.body.jam1;
-    var jam2 = req.body.jam2;
-    var jam1rp = req.body.jam1rp;
-    var jam2rp = req.body.jam2rp;
-    var lain = req.body.lain;
-    var insentifbulanan = req.body.insentifbulanan;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
     var jumlah = req.body.jumlah;
-    connection.query("insert into hrd_kikd (no_bukti,kd_bag,kd_peg,nm_peg,ptkp,hr,jam1,jam2,jam1rp,jam2rp,lain,tperbulan,jumlah) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, kd_bag, kd_peg, nm_peg, ptkp, hr, jam1, jam2, jam1rp, jam2rp, lain, insentifbulanan, jumlah],
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1693,8 +1698,15 @@ exports.edit_header_kik_jahit = function (req, res) {
     var no_bukti = req.body.no_bukti;
     var kd_bag = req.body.kd_bag;
     var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
     var notes = req.body.notes;
-    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,notes=? WHERE no_bukti=?", [kd_bag, nm_bag, notes, no_bukti],
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1706,8 +1718,8 @@ exports.edit_header_kik_jahit = function (req, res) {
 
 exports.hapus_kik_jahit = function (req, res) {
     var tabel = req.body.tabel;
-    var NO_BUKTI = req.body.no_bukti;
-    connection.query("delete from ?? where NO_BUKTI = ?", [tabel, NO_BUKTI],
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
         function (error, rows, fields) {
             if (error) {
                 console.log(error);
@@ -1717,6 +1729,1938 @@ exports.hapus_kik_jahit = function (req, res) {
 
             }
         });
+};
+
+exports.urut_nobukti_kik_jahit = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+
+///TRANSAKSI HEADER DETAIL KIK JUKI
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_juki
+exports.kik_juki_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'JUKI' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_juki
+exports.count_kik_juki_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'JUKI' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_juki = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_juki Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_juki = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_juki = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_juki = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_juki = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK KSP
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_ksp
+exports.kik_ksp_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'KSP' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_ksp
+exports.count_kik_ksp_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'KSP' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_ksp = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_ksp Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_ksp = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_ksp = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_ksp = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_ksp = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK PACKING
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_packing
+exports.kik_packing_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'PACKING' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_packing
+exports.count_kik_packing_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'PACKING' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_packing = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_packing Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_packing = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_packing = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_packing = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_packing = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK PLONG
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_plong
+exports.kik_plong_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'PLONG' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_plong
+exports.count_kik_plong_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'PLONG' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_plong = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_plong Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_plong = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_plong = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_plong = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_plong = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK SABLON
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_sablon
+exports.kik_sablon_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'SABLON' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_sablon
+exports.count_kik_sablon_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'SABLON' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_sablon = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_sablon Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_sablon = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_sablon = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_sablon = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_sablon = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK INJECTION
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_injection
+exports.kik_injection_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'INJECTION' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_injection
+exports.count_kik_injection_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'INJECTION' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_injection = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_injection Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_injection = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_injection = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_injection = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_injection = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK ASSEMBLING
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_assembling
+exports.kik_assembling_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'ASSEMBLING' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_assembling
+exports.count_kik_assembling_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'ASSEMBLING' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_assembling = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_assembling Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_assembling = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_assembling = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_assembling = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_assembling = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK CAT SPRAY
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_catspray
+exports.kik_catspray_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'CAT SPRAY' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_catspray
+exports.count_kik_catspray_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'CAT SPRAY' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_catspray = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_catspray Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_catspray = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_catspray = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_catspray = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_catspray = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK COMPOUND
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_compound
+exports.kik_compound_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'COMPOUND' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_compound
+exports.count_kik_compound_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'COMPOUND' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_compound = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_compound Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_compound = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_compound = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_compound = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_compound = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK FLOCKING
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_flocking
+exports.kik_flocking_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'FLOCKING' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_flocking
+exports.count_kik_flocking_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'FLOCKING' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_flocking = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_flocking Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_flocking = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_flocking = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_flocking = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_flocking = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK STRONG
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_strong
+exports.kik_strong_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'STRONG' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_strong
+exports.count_kik_strong_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'STRONG' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_strong = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_strong Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_strong = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_strong = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_strong = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_strong = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK MICRO
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_micro
+exports.kik_micro_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'MICRO' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_micro
+exports.count_kik_micro_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'MICRO' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_micro = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_micro Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_micro = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_micro = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_micro = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_micro = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL KIK DR2
+///HEADER
+// ==================================================================
+///Paginate Transaksi kik_dr2
+exports.kik_dr2_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'DR2' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi kik_dr2
+exports.count_kik_dr2_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'DR2' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_kik_dr2 = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah kik_dr2 Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_kik_dr2 = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_kik_dr2 = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_kik_dr2 = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_kik_dr2 = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
+};
+
+///TRANSAKSI HEADER DETAIL PREMI PSP
+///HEADER
+// ==================================================================
+///Paginate Transaksi premi_psp
+exports.premi_psp_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    var offset_page = Number(req.body.offset);
+    var limit_page = Number(req.body.limit);
+    connection.query("select * from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'MICRO' LIMIT ?, ?", [filter_cari, filter_cari, offset_page, limit_page],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+
+            }
+        });
+}
+
+///paginate Transaksi premi_psp
+exports.count_premi_psp_paginate = function (req, res) {
+    var filter_cari = '%' + req.body.cari + '%';
+    connection.query("select COUNT(*) from hrd_kik where (no_bukti like ? or kd_bag like ?) AND flag = 'MICRO' ORDER BY no_bukti", [filter_cari, filter_cari],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok(rows, res);
+            }
+        });
+}
+
+exports.tambah_header_premi_psp = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var flag = req.body.flag;
+    var per = req.body.per;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var tqty = req.body.tqty;
+    var tjumlah = req.body.tjumlah;
+    var t_hr = req.body.t_hr;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    var dr = req.body.dr;
+    connection.query("insert into hrd_kik (no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, fase, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, per, kd_bag, nm_bag, kik_grup, tqty, tjumlah, t_hr, notes, flag, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, dr],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah premi_psp Header', res);
+
+            }
+        });
+};
+
+///DETAIL
+exports.tambah_detail_premi_psp = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var no_kik = req.body.no_kik;
+    var tgl_kik = req.body.tgl_kik;
+    var model = req.body.model;
+    var item = req.body.item;
+    var des1 = req.body.des1;
+    var qty = req.body.qty;
+    var upah = req.body.upah;
+    var jumlah = req.body.jumlah;
+    var org = req.body.org;
+    var hr = req.body.hr;
+    var dr = req.body.dr;
+    var per = req.body.per;
+    connection.query("insert into hrd_kikd (no_bukti,no_kik,tgl_kik,model,item,des1,qty,upah,jumlah,org,hr,dr,fase) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", [no_bukti, no_kik, tgl_kik, model, item, des1, qty, upah, jumlah, org, hr, dr, per],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Tambah Kas Detail', res);
+            }
+        });
+};
+
+exports.edit_header_premi_psp = function (req, res) {
+    var no_bukti = req.body.no_bukti;
+    var kd_bag = req.body.kd_bag;
+    var nm_bag = req.body.nm_bag;
+    var kik_grup = req.body.kik_grup;
+    var notes = req.body.notes;
+    var periode = req.body.periode;
+    var ppn = req.body.ppn;
+    var minuss = req.body.minuss;
+    var lunas_bs = req.body.lunas_bs;
+    var upah_tambah = req.body.upah_tambah;
+    var pot_bon = req.body.pot_bon;
+    connection.query("UPDATE hrd_kik set kd_bag=?,nm_bag=?,kik_grup=?,notes=?,fase=?,ppn=?,minuss=?,lunas_bs=?,upah_tambah=?,pot_bon=? WHERE no_bukti=?", [kd_bag, nm_bag, kik_grup, notes, periode, ppn, minuss, lunas_bs, upah_tambah, pot_bon, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok('Berhasil Edit Kas Header', res);
+            }
+        });
+};
+
+exports.hapus_premi_psp = function (req, res) {
+    var tabel = req.body.tabel;
+    var no_bukti = req.body.no_bukti;
+    connection.query("delete from ?? where no_bukti = ?", [tabel, no_bukti],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+
+                response.ok('Berhasil Tambah Kas Header', res);
+
+            }
+        });
+};
+
+exports.urut_nobukti_premi_psp = function (req, res) {
+    var per = req.body.per;
+    connection.query("SELECT no_bukti FROM hrd_kik where per = ?", [per], function (error, rows, fields) {
+        if (error) {
+            console.log(error);
+        } else {
+
+            response.ok(rows, res);
+
+        }
+    });
 };
 
 ///TRANSAKSI HEADER DETAIL KAS

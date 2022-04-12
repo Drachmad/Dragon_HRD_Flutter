@@ -1,3 +1,4 @@
+import 'package:dragon/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dragon/config/color.dart';
@@ -24,8 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
       return Scaffold(
         body: Container(
           height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Color(0xFF070C35),
             image: DecorationImage(
               image: AssetImage("assets/images/background.png"),
               fit: BoxFit.cover,
@@ -33,8 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: Row(
             children: [
-              Expanded(flex: 5, child: bannerView()),
-              Expanded(flex: 5, child: loginView()),
+              // Expanded(flex: 5, child: bannerView()),
+              Expanded(child: loginView()),
             ],
           ),
         ),
@@ -74,113 +76,127 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget loginView() {
     var loginController = Provider.of<LoginController>(context, listen: false);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
-      child: AspectRatio(
-        aspectRatio: 0.9,
-        child: Container(
-          decoration: BoxDecoration(
-              color: kBackgroundColor,
-              border: Border.all(color: HijauColor),
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: GreyColor,
-                  blurRadius: 10.0,
-                  spreadRadius: 5.0,
-                  offset: const Offset(5, 5),
-                ),
-              ]),
-          padding: EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Spacer(),
-              Center(
-                child: Text(
-                  "Login",
-                  style: GoogleFonts.poppins(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w700,
-                      color: HijauColor),
-                ),
-              ),
-              Spacer(),
-              Text(
-                "Username",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(color: GreyColor),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: TextFormField(
-                  controller: loginController.usernameLogin,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(top: 18, bottom: 18),
-                    icon: Image.asset(
-                      "assets/images/ic_user_hijau.png",
-                      height: 20,
-                    ),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    focusedErrorBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white.withAlpha(0),
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(50),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: const Offset(5, 5),
+            ),
+          ]),
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Spacer(),
+          Center(
+            child: Image.asset(
+              "assets/images/ic_logo.png",
+              height: 100,
+            ),
+          ),
+          Center(
+            child: Stack(
+              children: <Widget>[
+                // Stroked text as border.
+                Text(
+                  'PT. INTIDRAGON SURYATAMA',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: (Responsive.isDesktop(context)) ? 48 : 24,
+                    fontWeight: FontWeight.w900,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 1
+                      ..color = Colors.white,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Text(
-                "Password",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(color: GreyColor),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: TextFormField(
-                  obscureText: true,
-                  controller: loginController.passwordLogin,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(top: 18, bottom: 18),
-                    icon: Image.asset(
-                      "assets/images/ic_password.png",
-                      height: 20,
-                    ),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    focusedErrorBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
+                // Solid text as fill.
+                Text(
+                  'PT. INTIDRAGON SURYATAMA',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: (Responsive.isDesktop(context)) ? 48 : 24,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white.withAlpha(0),
                   ),
                 ),
+              ],
+            ),
+          ),
+          Spacer(),
+          Center(
+            child: Container(
+              height: 40,
+              width: 350,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(15.0),
+                    bottomLeft: Radius.circular(15.0)),
               ),
-              Spacer(),
-              InkWell(
+              child: TextFormField(
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                controller: loginController.usernameLogin,
+                decoration: InputDecoration(
+                  hintText: 'USERNAME',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Center(
+            child: Container(
+              alignment: Alignment.center,
+              height: 40,
+              width: 350,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(15.0),
+                    bottomLeft: Radius.circular(15.0)),
+              ),
+              child: TextFormField(
+                obscureText: true,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                controller: loginController.passwordLogin,
+                decoration: InputDecoration(
+                  hintText: 'PASSWORD',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Center(
+            child: Container(
+              width: 120,
+              child: InkWell(
                 onTap: () {
                   loginController.getLogin().then((value) {
                     if (value != null) {
@@ -194,83 +210,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                   decoration: BoxDecoration(
-                      color: OrangeColor,
-                      borderRadius: BorderRadius.circular(10)),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0)),
+                  ),
                   child: Center(
                     child: Text(
                       "Login",
                       style: GoogleFonts.poppins(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white),
+                          color: Color(0xFF070C35)),
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 16,
-              ),
-              // InkWell(
-              //   onTap: () {
-              //     loginController.mode_login = false;
-              //     loginController.notifyListeners();
-              //   },
-              //   child: Container(
-              //     padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-              //     decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.circular(10),
-              //       border: Border.all(color: HijauColor),
-              //     ),
-              //     child: Center(
-              //       child: Text(
-              //         "Register",
-              //         style: GoogleFonts.poppins(
-              //             fontSize: 16,
-              //             fontWeight: FontWeight.w700,
-              //             color: HijauColor),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 16,
-              // ),
-              // Center(
-              //   child: TextButton(
-              //     onPressed: () {
-              //       showAnimatedDialog_withCallBack(
-              //           context, SettingConnection(), isFlip: true,
-              //           callback: (value) {
-              //         if (value != null) {}
-              //       });
-              //     },
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         Image.asset(
-              //           "assets/images/ic_setting.png",
-              //           height: 25,
-              //         ),
-              //         SizedBox(
-              //           width: 8,
-              //         ),
-              //         Text(
-              //           "Database Connection",
-              //           style: GoogleFonts.poppins(
-              //               fontSize: 14,
-              //               fontWeight: FontWeight.w600,
-              //               color: Colors.black),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              Spacer(),
-            ],
+            ),
           ),
-        ),
+          SizedBox(
+            height: 16,
+          ),
+          Spacer(),
+        ],
       ),
     );
   }

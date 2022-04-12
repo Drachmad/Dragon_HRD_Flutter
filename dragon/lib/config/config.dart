@@ -17,10 +17,10 @@ class config {
 
   String format_rupiah(String uang_input) {
     try {
-      String uang_rupiah = "0";
+      String uangRupiah = "0";
       double convert = convert_rupiah(uang_input);
-      uang_rupiah = formatCurrency.format(convert).replaceAll(",00", "");
-      return uang_rupiah;
+      uangRupiah = formatCurrency.format(convert).replaceAll(",00", "");
+      return uangRupiah;
     } catch (e) {
       return '';
       print(e);

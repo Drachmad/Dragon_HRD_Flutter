@@ -13,14 +13,13 @@ class HarianController with ChangeNotifier {
       new DateRangePickerController();
   List data_harian_list = [];
   bool proses = false;
-  bool isEnable_button = true;
   String selectedDate = '';
   // String dateCount = '';
   // String range = 'Pilih tanggal';
   // String rangeCount = '';
   // String tanggal_awal = "";
   // String tanggal_akhir = "";
-  int index_terpilih;
+  // int index_terpilih;
 
   ///paginate
   TextEditingController c_page = new TextEditingController();
@@ -42,7 +41,7 @@ class HarianController with ChangeNotifier {
     c_page.text = '1';
     limitPaging();
 
-    index_terpilih = null;
+    // index_terpilih = null;
     // tanggal_awal =
     //     DateFormat('yyyy-MM-dd', "id_ID").format(DateTime.now()).toString();
     // tanggal_akhir =
@@ -274,14 +273,6 @@ class HarianController with ChangeNotifier {
     lainTotal = 0;
     insentifbulananTotal = 0;
     jumlahTotal = 0;
-    await DataPegawai().data_pegawai().then((value) {
-      if (value != null) {
-        pegawaiList.clear();
-        for (int i = 0; i < value.length; i++) {
-          pegawaiList.add(DataPegawai.fromJson(value[i]));
-        }
-      }
-    });
   }
 
   Future<void> initData_editHarian(var data_edit) async {
@@ -297,7 +288,7 @@ class HarianController with ChangeNotifier {
 
     for (int i = 0; i < data_lama.length; i++) {
       DataPegawai mPegawai = DataPegawai(
-        noid: data_lama[i]['no_id'],
+        no_id: data_lama[i]['no_id'],
         kd_peg: data_lama[i]['kd_peg'],
         nm_peg: data_lama[i]['nm_peg'],
         kd_grup: data_lama[i]['kd_grup'],
@@ -312,6 +303,33 @@ class HarianController with ChangeNotifier {
         insentifbulanan:
             double.parse(data_lama[i]['tperbulan'].toString()) ?? 0.00,
         jumlah: double.parse(data_lama[i]['jumlah'].toString()) ?? 0.00,
+      );
+      data_pegawai_keranjang.add(mPegawai);
+    }
+    hitungSubTotal();
+  }
+
+  Future<void> get_data_bagian(var kd_bag) async {
+    List data_bagian =
+        await m_order.select_harian_detail(kd_bag, "kd_bag", "hrd_absend");
+    data_pegawai_keranjang = new List<DataPegawai>();
+    for (int i = 0; i < data_bagian.length; i++) {
+      DataPegawai mPegawai = DataPegawai(
+        no_id: data_bagian[i]['no_id'],
+        kd_peg: data_bagian[i]['kd_peg'],
+        nm_peg: data_bagian[i]['nm_peg'],
+        kd_grup: data_bagian[i]['kd_grup'],
+        nm_grup: data_bagian[i]['nm_grup'],
+        ptkp: data_bagian[i]['ptkp'],
+        hr: double.parse(data_bagian[i]['hr'].toString()) ?? 0.00,
+        jam1: double.parse(data_bagian[i]['jam1'].toString()) ?? 0.00,
+        jam2: double.parse(data_bagian[i]['jam2'].toString()) ?? 0.00,
+        jam1rp: double.parse(data_bagian[i]['jam1rp'].toString()) ?? 0.00,
+        jam2rp: double.parse(data_bagian[i]['jam2rp'].toString()) ?? 0.00,
+        lain: double.parse(data_bagian[i]['lain'].toString()) ?? 0.00,
+        insentifbulanan:
+            double.parse(data_bagian[i]['tperbulan'].toString()) ?? 0.00,
+        jumlah: double.parse(data_bagian[i]['jumlah'].toString()) ?? 0.00,
       );
       data_pegawai_keranjang.add(mPegawai);
     }

@@ -1,12 +1,8 @@
-import 'package:dragon/mysql/koneksi_mysql.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:dragon/constants.dart';
 
 class model_harian {
-  static String table = 'hrd_absen';
-  static String table_detail = 'hrd_absend';
-  koneksi_mysql m_koneksi = koneksi_mysql();
   String baseUrl = base_url;
 
   ///paginate
@@ -167,22 +163,28 @@ class model_harian {
 
   ///SELECT DETAIL
   Future<List> select_harian_detail(
-      String no_bukti, String paramkolom, String paramtabel) async {
+      String filter, String paramkolom, String paramtabel) async {
     final response = await http.post(
       Uri.parse("${baseUrl}:3000/select_detail"),
-      body: {"cari": no_bukti, "kolom": paramkolom, "tabel": paramtabel},
+      body: {"cari": filter, "kolom": paramkolom, "tabel": paramtabel},
     );
     var results2 = json.decode(response.body);
+    // print(results2);
     return results2['data'].toList();
   }
 
-  Future<List> delete_harian(String no_bukti) async {
-    var konek = await m_koneksi.koneksi();
-    var results1 =
-        await konek.query("delete from $table where no_bukti = '$no_bukti';");
-    var results2 = await konek
-        .query("delete from $table_detail where no_bukti = '$no_bukti';");
-    await konek.close();
-    return results2.toList();
+  Future delete_harian(String no_bukti) async {
+    try {
+      await http.post(
+        Uri.parse("${baseUrl}:3000/hapus_harian"),
+        body: {"tabel": "hrd_absen", "no_bukti": no_bukti},
+      );
+      await http.post(
+        Uri.parse("${baseUrl}:3000/hapus_harian"),
+        body: {"tabel": "hrd_absend", "no_bukti": no_bukti},
+      );
+    } catch (e) {
+      return false;
+    }
   }
 }

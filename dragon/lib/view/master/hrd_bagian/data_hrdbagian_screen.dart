@@ -17,8 +17,6 @@ class DataHRDbagianScreen extends StatefulWidget {
 }
 
 class _DataHRDbagianScreenState extends State<DataHRDbagianScreen> {
-  TextEditingController cari = new TextEditingController();
-
   @override
   void initState() {
     Provider.of<HRD_BagianController>(context, listen: false).setProsess(true);
@@ -151,7 +149,7 @@ class _DataHRDbagianScreenState extends State<DataHRDbagianScreen> {
                               child: Container(
                                 height: 30,
                                 child: TextField(
-                                  controller: cari,
+                                  controller: hrdbagianController.cari,
                                   onChanged: (value) {
                                     Provider.of<HRD_BagianController>(context,
                                             listen: false)
@@ -385,7 +383,7 @@ class _DataHRDbagianScreenState extends State<DataHRDbagianScreen> {
                               if (value != null) {
                                 hrdbagianController.limit = value;
                                 hrdbagianController.selectDataPaginate(
-                                    false, cari.text);
+                                    false, hrdbagianController.cari.text);
                               }
                             },
                           ),
@@ -401,7 +399,8 @@ class _DataHRDbagianScreenState extends State<DataHRDbagianScreen> {
                       hrdbagianController.page_index--;
                       hrdbagianController.c_page.text =
                           (hrdbagianController.page_index + 1).toString();
-                      hrdbagianController.selectDataPaginate(false, cari.text);
+                      hrdbagianController.selectDataPaginate(
+                          false, hrdbagianController.cari.text);
                     }
                   },
                   child: Container(
@@ -441,7 +440,8 @@ class _DataHRDbagianScreenState extends State<DataHRDbagianScreen> {
                       hrdbagianController.page_index++;
                       hrdbagianController.c_page.text =
                           (hrdbagianController.page_index + 1).toString();
-                      hrdbagianController.selectDataPaginate(false, cari.text);
+                      hrdbagianController.selectDataPaginate(
+                          false, hrdbagianController.cari.text);
                     }
                   },
                   child: Container(

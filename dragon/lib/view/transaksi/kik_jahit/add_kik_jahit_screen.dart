@@ -1,4 +1,5 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:dragon/controller/login_controller.dart';
 import 'package:dragon/view/transaksi/kik_jahit/widget/pilih_bagian.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,10 +8,12 @@ import 'package:dragon/config/animation_custom_dialog.dart';
 import 'package:dragon/config/color.dart';
 import 'package:dragon/config/config.dart';
 import 'package:dragon/controller/transaksi/kik_jahit_controller.dart';
-import 'package:dragon/model/data_pegawai.dart';
+import 'package:dragon/model/data_kik.dart';
 import 'package:dragon/view/base_widget/save_success.dart';
-import 'package:dragon/view/transaksi/kik_jahit/widget/add_kik_jahit_card.dart';
+import 'package:dragon/view/transaksi/kik_jahit/add_kik_jahit_card.dart';
 import 'package:provider/provider.dart';
+import 'package:pattern_formatter/numeric_formatter.dart';
+import 'package:intl/intl.dart' as intl;
 
 class AddKikJahitScreen extends StatefulWidget {
   bool isModeEdit;
@@ -22,8 +25,28 @@ class AddKikJahitScreen extends StatefulWidget {
 }
 
 class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
-  GlobalKey<AutoCompleteTextFieldState<DataPegawai>> key = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<DataKIK>> key = new GlobalKey();
   AutoCompleteTextField searchTextField;
+
+  // Default Drop Down Item.
+  String periodeValue = '1';
+
+  List<String> periode = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12'
+  ];
+
+  final formatter = intl.NumberFormat.decimalPattern();
 
   _AddKikJahitScreenState();
 
@@ -32,10 +55,13 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
     if (widget.isModeEdit) {
       Provider.of<KikJahitController>(context, listen: false)
           .initData_editKikJahit(widget.data_edit);
+      periodeValue = widget.data_edit['fase'].toString();
     } else {
       Provider.of<KikJahitController>(context, listen: false)
           .initData_addKikJahit();
     }
+    Provider.of<KikJahitController>(context, listen: false).dr =
+        Provider.of<LoginController>(context, listen: false).dr;
     super.initState();
   }
 
@@ -46,22 +72,22 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
       return Scaffold(
         backgroundColor: kBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: HijauColor,
           elevation: 1,
           title: Row(
             children: [
               Container(
                 height: 25,
                 width: 1,
-                color: AbuColor,
+                color: Colors.white,
               ),
               SizedBox(
                 width: 20,
               ),
               Text(
                 (widget.isModeEdit)
-                    ? "Edit Transaksi KikJahit"
-                    : "Tambah Transaksi KikJahit",
+                    ? "Edit Transaksi Kik Jahit"
+                    : "Tambah Transaksi Kik Jahit",
                 style: GoogleFonts.poppins(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -99,7 +125,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                           showAnimatedDialog_withCallBack(
                               context,
                               SaveSuccess("Success !!",
-                                  "Berhasil menyimpan Transaksi KikJahit"),
+                                  "Berhasil menyimpan Transaksi Kik Jahit"),
                               isFlip: true, callback: (value) {
                             if (value != null) {
                               if (value) {
@@ -159,8 +185,8 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(
-                            left: 24, right: 24, top: 24, bottom: 24),
+                        padding:
+                            const EdgeInsets.only(left: 24, right: 24, top: 24),
                         child: Row(
                           children: [
                             Expanded(
@@ -331,6 +357,61 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
+                                      "KIK Grup",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.1),
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: TextFormField(
+                                        controller: kik_jahitController
+                                            .kik_grupController,
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 18, bottom: 18),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          focusedErrorBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 24, right: 24, bottom: 24),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
                                       "Notes",
                                       style: TextStyle(
                                           fontSize: 14,
@@ -367,6 +448,70 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                                 ),
                               ),
                             ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Periode",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: GreyColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: DropdownButtonHideUnderline(
+                                        child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton<String>(
+                                            value: periodeValue,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                            onChanged: (String data) {
+                                              setState(() {
+                                                periodeValue = data;
+                                              });
+                                              kik_jahitController.periode =
+                                                  periodeValue;
+                                              kik_jahitController
+                                                  .notifyListeners();
+                                            },
+                                            items: periode
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(flex: 2, child: SizedBox())
                           ],
                         ),
                       ),
@@ -385,7 +530,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                   child: Container(
                     height: 45,
                     padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: searchTextField = AutoCompleteTextField<DataPegawai>(
+                    child: searchTextField = AutoCompleteTextField<DataKIK>(
                       style: new TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
@@ -413,19 +558,20 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                         disabledBorder: InputBorder.none,
                       ),
                       itemSubmitted: (item) {
-                        DataPegawai db_item = DataPegawai(
-                          noid: item.noid,
-                          kd_peg: item.kd_peg,
-                          nm_peg: item.nm_peg,
-                          ptkp: item.ptkp,
-                        );
+                        DataKIK db_item = DataKIK(
+                            no_kik: item.no_kik,
+                            qty: item.qty,
+                            model: item.model,
+                            item: item.item,
+                            des1: item.des1,
+                            upah: item.upah);
                         searchTextField.textField.controller.clear();
                         kik_jahitController.addKeranjang(db_item);
                       },
                       submitOnSuggestionTap: true,
                       clearOnSubmit: false,
                       key: key,
-                      suggestions: kik_jahitController.pegawaiList,
+                      suggestions: kik_jahitController.kikList,
                       itemBuilder: (context, item) {
                         return Container(
                           child: Column(
@@ -436,9 +582,9 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                                 child: Row(
                                   children: <Widget>[
                                     Expanded(
-                                      flex: 3,
+                                      flex: 2,
                                       child: Text(
-                                        item.nm_peg,
+                                        item.no_kik,
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.w500,
@@ -446,9 +592,39 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 5,
+                                      flex: 2,
                                       child: Text(
-                                        item.kd_peg,
+                                        item.model.toString(),
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        item.des1.toString(),
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        item.qty.toString(),
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        item.upah.toString(),
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.w500,
@@ -467,10 +643,10 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                         );
                       },
                       itemSorter: (a, b) {
-                        return a.kd_peg.compareTo(b.kd_peg);
+                        return a.no_kik.compareTo(b.no_kik);
                       },
                       itemFilter: (item, query) {
-                        return item.nm_peg
+                        return item.no_kik
                             .toLowerCase()
                             .startsWith(query.toLowerCase());
                       },
@@ -502,19 +678,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "NIP",
-                          style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black87),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Center(
-                        child: Text(
-                          "Nama",
+                          "NO KIK",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -526,7 +690,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "PTKP",
+                          "Tgl",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -538,7 +702,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "HR",
+                          "Model",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -550,7 +714,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Jam1",
+                          "Item",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -562,7 +726,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Jam2",
+                          "Des 1",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -574,7 +738,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Jam 1 Rp",
+                          "Qty",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -586,31 +750,7 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                       flex: 2,
                       child: Center(
                         child: Text(
-                          "Jam 2 Rp",
-                          style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black87),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text(
-                          "Lain",
-                          style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black87),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text(
-                          "Insentif Bulan",
+                          "Upah",
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -630,134 +770,456 @@ class _AddKikJahitScreenState extends State<AddKikJahitScreen> {
                         ),
                       ),
                     ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
+                          "ORG",
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black87),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
+                          "HR",
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black87),
+                        ),
+                      ),
+                    ),
                     SizedBox(
-                      width: 36,
+                      width: 45,
                     ),
                   ],
                 ),
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: kik_jahitController.data_pegawai_keranjang.length,
+                  itemCount: kik_jahitController.data_kik_keranjang.length,
                   itemBuilder: (BuildContext context, int index) {
                     return AddKikJahitCard(context, index,
-                        kik_jahitController.data_pegawai_keranjang[index]);
+                        kik_jahitController.data_kik_keranjang[index]);
                   },
+                ),
+              ),
+              Container(
+                color: HijauColor,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 24, right: 24, top: 10, bottom: 10),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                            flex: 11,
+                            child: Text(
+                              "TOTAL",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                formatter.format(kik_jahitController.qtyTotal),
+                                style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          Expanded(flex: 2, child: SizedBox()),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                formatter
+                                    .format(kik_jahitController.jumlahTotal),
+                                style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          Expanded(flex: 2, child: SizedBox()),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                formatter.format(kik_jahitController.hrTotal),
+                                style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 36,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
         bottomNavigationBar: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 8,
+          padding: EdgeInsets.only(left: 24, right: 24),
+          child: Card(
+            color: Colors.white,
+            elevation: 3,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: Padding(
+              padding: EdgeInsets.only(left: 24, right: 24, top: 3, bottom: 3),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              "Pajak",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.1),
+                                border: Border.all(color: GreyColor),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: TextFormField(
+                                  controller: kik_jahitController.ppnController,
+                                  readOnly: true,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [ThousandsFormatter()],
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500),
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 16),
+                                    hintText: "0.0",
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: GreyColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    focusedErrorBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              "Minus",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.1),
+                                border: Border.all(color: GreyColor),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: TextFormField(
+                                  controller:
+                                      kik_jahitController.minussController,
+                                  readOnly: true,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [ThousandsFormatter()],
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500),
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 16),
+                                    hintText: "0.0",
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: GreyColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    focusedErrorBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              "Lunas BS",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: GreyColor),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: TextFormField(
+                                  controller:
+                                      kik_jahitController.lunas_bsController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [ThousandsFormatter()],
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500),
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 16),
+                                    hintText: "0.0",
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: GreyColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    focusedErrorBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              "Upah Tambah",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: GreyColor),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: TextFormField(
+                                  controller:
+                                      kik_jahitController.upah_tambahController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [ThousandsFormatter()],
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500),
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 16),
+                                    hintText: "0.0",
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: GreyColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    focusedErrorBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              "Gaji KIK Nett",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.1),
+                                border: Border.all(color: GreyColor),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: TextFormField(
+                                  controller:
+                                      kik_jahitController.pot_bonController,
+                                  readOnly: true,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [ThousandsFormatter()],
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500),
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 16),
+                                    hintText: "0.0",
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: GreyColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    focusedErrorBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 9,
-                child: Text(
-                  "TOTAL",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config()
-                      .format_rupiah(kik_jahitController.hrTotal.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config()
-                      .format_rupiah(kik_jahitController.jam1Total.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config()
-                      .format_rupiah(kik_jahitController.jam2Total.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config().format_rupiah(
-                      kik_jahitController.jam1rpTotal.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config().format_rupiah(
-                      kik_jahitController.jam2rpTotal.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config()
-                      .format_rupiah(kik_jahitController.lainTotal.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config().format_rupiah(
-                      kik_jahitController.insentifbulananTotal.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  config().format_rupiah(
-                      kik_jahitController.jumlahTotal.toString()),
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                ),
-              ),
-              SizedBox(
-                width: 36,
-              )
-            ],
+            ),
           ),
         ),
       );
